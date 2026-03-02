@@ -3,197 +3,175 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PREMIUM STREETWEAR | Full Commerce System</title>
+    <title>CAPTAIN X | Future Wear</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@300;400;600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@300;600&family=Outfit:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
-        :root { --accent: #3b82f6; --dark-bg: #050505; --card-bg: #111111; }
-        body { font-family: 'Anuphan', sans-serif; background-color: var(--dark-bg); color: #e2e8f0; scroll-behavior: smooth; }
-        .blue-gradient { background: linear-gradient(135deg, #60a5fa, #2563eb); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .glass-card { background: var(--card-bg); border: 1px solid rgba(255, 255, 255, 0.05); transition: 0.3s; }
-        .glass-card:hover { border-color: var(--accent); transform: translateY(-8px); box-shadow: 0 10px 30px rgba(59, 130, 246, 0.2); }
-        .category-pill.active { background: var(--accent); color: white; }
+        :root { --blue-glow: #3b82f6; --dark-pure: #000000; --card-bg: #0a0a0a; }
+        body { font-family: 'Anuphan', sans-serif; background-color: var(--dark-pure); color: #fff; overflow-x: hidden; }
+        .font-modern { font-family: 'Outfit', sans-serif; }
+
+        /* Animation Background */
+        .bg-gradient-blur {
+            position: fixed; top: -10%; left: -10%; width: 40%; height: 40%;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, transparent 70%);
+            filter: blur(80px); z-index: -1; animation: float 10s infinite alternate;
+        }
+
+        @keyframes float { from { transform: translate(0, 0); } to { transform: translate(20%, 20%); } }
+
+        /* Modern Card & Buttons */
+        .ultra-card {
+            background: rgba(15, 15, 15, 0.6); backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.03); transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .ultra-card:hover {
+            border-color: var(--blue-glow); box-shadow: 0 0 30px rgba(59, 130, 246, 0.2); transform: translateY(-10px);
+        }
+
+        .btn-glow {
+            position: relative; overflow: hidden; transition: all 0.3s ease;
+            background: #fff; color: #000; border-radius: 99px; font-weight: 700;
+        }
+
+        .btn-glow:hover {
+            background: var(--blue-glow); color: #fff; box-shadow: 0 0 20px var(--blue-glow);
+        }
+
+        /* Hide Scrollbar */
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
+
+        .active-tab { border-bottom: 2px solid var(--blue-glow); color: var(--blue-glow) !important; }
     </style>
 </head>
 <body>
+    <div class="bg-gradient-blur"></div>
 
-    <div class="bg-blue-600 text-white text-[10px] py-1 text-center font-bold tracking-widest uppercase">
-        Free Shipping on orders over ฿2,000 | New Collection Drop!
-    </div>
-
-    <nav class="sticky top-0 z-50 px-6 py-4 flex justify-between items-center bg-black/80 backdrop-blur-xl border-b border-white/5">
-        <div class="flex items-center gap-8">
-            <h1 class="text-2xl font-bold font-modern blue-gradient tracking-tighter">CAPTAIN®</h1>
-            <div class="hidden lg:flex gap-6 text-xs font-bold uppercase tracking-widest text-gray-400">
-                <button onclick="filterCategory('All')" class="hover:text-white">Shop All</button>
-                <button onclick="filterCategory('T-Shirt')" class="hover:text-white">T-Shirts</button>
-                <button onclick="filterCategory('Hoodie')" class="hover:text-white">Outerwear</button>
-            </div>
-        </div>
+    <nav class="fixed top-0 w-full z-[100] px-8 py-6 flex justify-between items-center backdrop-blur-lg border-b border-white/5">
+        <div class="text-2xl font-bold font-modern tracking-[0.2em] uppercase">Captain<span class="text-blue-500">.</span></div>
         
-        <div class="flex items-center gap-5">
-            <div class="relative hidden md:block">
-                <input type="text" id="searchBar" onkeyup="searchProduct()" placeholder="Search items..." class="bg-white/5 border border-white/10 rounded-full px-4 py-1.5 text-xs focus:outline-none focus:border-blue-500 w-48">
-                <i class="fas fa-search absolute right-3 top-2 text-gray-500 text-[10px]"></i>
-            </div>
-            <div class="relative cursor-pointer group" onclick="toggleCart()">
-                <i class="fas fa-shopping-cart text-lg group-hover:text-blue-400 transition"></i>
-                <span id="cart-count" class="absolute -top-2 -right-2 bg-blue-600 text-[9px] w-4 h-4 flex items-center justify-center rounded-full font-bold">0</span>
-            </div>
+        <div class="hidden md:flex gap-10 text-[10px] font-bold tracking-[0.3em] uppercase text-gray-400">
+            <button onclick="filterCat('All')" class="nav-link active-tab transition hover:text-white">All</button>
+            <button onclick="filterCat('T-Shirt')" class="nav-link transition hover:text-white">T-Shirt</button>
+            <button onclick="filterCat('Hoodie')" class="nav-link transition hover:text-white">Outer</button>
         </div>
+
+        <button onclick="toggleCart()" class="relative group">
+            <div class="w-12 h-12 flex items-center justify-center rounded-full border border-white/10 group-hover:border-blue-500 transition">
+                <i class="fa-solid fa-bag-shopping"></i>
+            </div>
+            <span id="cart-count" class="absolute -top-1 -right-1 bg-blue-600 text-[10px] w-5 h-5 flex items-center justify-center rounded-full border-2 border-black">0</span>
+        </button>
     </nav>
 
-    <div class="max-w-7xl mx-auto px-6 py-12">
-        
-        <div class="flex gap-3 overflow-x-auto pb-6 md:hidden">
-            <button onclick="filterCategory('All')" class="category-pill active px-5 py-2 rounded-full border border-white/10 text-xs whitespace-nowrap">All Items</button>
-            <button onclick="filterCategory('T-Shirt')" class="category-pill px-5 py-2 rounded-full border border-white/10 text-xs whitespace-nowrap">T-Shirts</button>
-            <button onclick="filterCategory('Hoodie')" class="category-pill px-5 py-2 rounded-full border border-white/10 text-xs whitespace-nowrap">Hoodies</button>
+    <main class="pt-32 pb-20 px-8 max-w-[1400px] mx-auto">
+        <div class="mb-16">
+            <h2 class="text-[10px] tracking-[0.5em] text-blue-500 uppercase font-bold mb-4 italic">Available Now</h2>
+            <h1 class="text-5xl md:text-7xl font-bold font-modern tracking-tighter">FUTURE <br> ARCHIVE<span class="text-blue-500">.</span></h1>
         </div>
 
-        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8" id="product-grid">
+        <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             </div>
-    </div>
+    </main>
 
-    <div id="cart-sidebar" class="fixed right-0 top-0 h-full w-full md:w-[450px] bg-[#0c0c0c] shadow-2xl transform translate-x-full transition-transform duration-500 z-[100] border-l border-white/10 flex flex-col">
-        <div class="p-6 border-b border-white/5 flex justify-between items-center">
-            <div>
-                <h2 class="text-xl font-bold">Your Selection</h2>
-                <p id="item-summary" class="text-[10px] text-gray-500 uppercase tracking-widest mt-1">0 ITEMS SELECTED</p>
-            </div>
-            <button onclick="toggleCart()" class="w-10 h-10 flex items-center justify-center rounded-full bg-white/5 hover:bg-white/10 transition">
-                <i class="fas fa-times"></i>
-            </button>
+    <div id="cart-sidebar" class="fixed right-4 top-4 bottom-4 w-[calc(100%-32px)] md:w-[400px] ultra-card rounded-[32px] translate-x-[120%] transition-transform duration-700 z-[110] p-8 flex flex-col">
+        <div class="flex justify-between items-center mb-10">
+            <h3 class="text-xl font-bold font-modern uppercase tracking-widest italic">Bag</h3>
+            <button onclick="toggleCart()" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark text-2xl"></i></button>
         </div>
 
-        <div id="cart-items" class="flex-grow overflow-y-auto p-6 space-y-6">
+        <div id="cart-items" class="flex-grow overflow-y-auto space-y-8 pr-2">
             </div>
 
-        <div class="p-8 bg-[#111] border-t border-white/5">
-            <div class="space-y-2 mb-6 text-sm">
-                <div class="flex justify-between text-gray-400"><span>Subtotal</span><span id="subtotal">฿0</span></div>
-                <div class="flex justify-between text-gray-400"><span>Shipping</span><span>FREE</span></div>
-                <div class="flex justify-between text-xl font-bold pt-4 border-t border-white/5 mt-4">
-                    <span>Total Amount</span>
-                    <span class="blue-gradient" id="total-price">฿0</span>
-                </div>
+        <div class="mt-8 pt-8 border-t border-white/5">
+            <div class="flex justify-between items-end mb-8">
+                <span class="text-gray-500 text-xs uppercase tracking-widest font-bold">Total Est.</span>
+                <span id="total-price" class="text-3xl font-modern font-bold tracking-tighter">฿0</span>
             </div>
-            <button onclick="sendToLine()" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-4 rounded-xl font-bold transition-all flex items-center justify-center gap-3">
-                <i class="fab fa-line text-2xl"></i> CONFIRM ORDER VIA LINE
+            <button onclick="checkout()" class="w-full btn-glow py-5 text-xs uppercase tracking-[0.2em]">
+                Confirm Purchase
             </button>
         </div>
     </div>
 
     <script>
-        // ขยายรายการสินค้าให้ดูเยอะ (เพิ่มได้ไม่จำกัด)
         const products = [
-            { id: 1, name: 'Cyberpunk Tee 1.0', price: 690, cat: 'T-Shirt', img: 'https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=500', tag: 'New' },
-            { id: 2, name: 'Essential Hoodie', price: 1490, cat: 'Hoodie', img: 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=500', tag: 'Sale' },
-            { id: 3, name: 'Dark Side Cargo', price: 1290, cat: 'Pants', img: 'https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=500', tag: '' },
-            { id: 4, name: 'Future Tech Cap', price: 450, cat: 'Accessory', img: 'https://images.unsplash.com/photo-1588850567047-1845a9ee0280?w=500', tag: 'Popular' },
-            { id: 5, name: 'Street Oversize', price: 590, cat: 'T-Shirt', img: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=500', tag: '' },
+            { id: 1, name: 'NOVA OVERSIZE', price: 790, cat: 'T-Shirt', img: 'https://images.unsplash.com/photo-1554568218-0f1715e72254?w=800' },
+            { id: 2, name: 'GHOST HOODIE', price: 1590, cat: 'Hoodie', img: 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=800' },
+            { id: 3, name: 'VOID CARGO', price: 1890, cat: 'Pants', img: 'https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=800' },
+            { id: 4, name: 'CORE BEANIE', price: 450, cat: 'Acc', img: 'https://images.unsplash.com/photo-1576871337622-98d48d365da2?w=800' }
         ];
 
         let cart = [];
-        let currentCategory = 'All';
 
-        function renderProducts(data = products) {
-            const grid = document.getElementById('product-grid');
-            grid.innerHTML = data.map(p => `
-                <div class="glass-card rounded-3xl overflow-hidden flex flex-col group">
-                    <div class="relative overflow-hidden aspect-[4/5]">
-                        <img src="${p.img}" class="w-full h-full object-cover transition duration-700 group-hover:scale-110">
-                        ${p.tag ? `<span class="absolute top-4 left-4 bg-blue-600 text-[10px] font-bold px-3 py-1 rounded-full">${p.tag}</span>` : ''}
-                    </div>
-                    <div class="p-5 flex-grow">
-                        <p class="text-[9px] text-gray-500 font-bold uppercase tracking-widest mb-1">${p.cat}</p>
-                        <h3 class="text-md font-bold mb-3 tracking-tight group-hover:text-blue-400 transition">${p.name}</h3>
-                        
-                        <div class="flex items-center justify-between mt-auto">
-                            <span class="text-lg font-bold font-modern">฿${p.price.toLocaleString()}</span>
-                            <button onclick="quickAdd(${p.id})" class="w-10 h-10 rounded-full bg-white text-black flex items-center justify-center hover:bg-blue-500 hover:text-white transition">
-                                <i class="fas fa-plus text-xs"></i>
-                            </button>
+        function render(items = products) {
+            document.getElementById('product-grid').innerHTML = items.map(p => `
+                <div class="ultra-card rounded-[40px] p-4 flex flex-col group">
+                    <div class="relative overflow-hidden rounded-[30px] aspect-[3/4] mb-6">
+                        <img src="${p.img}" class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                            <button onclick="add(${p.id})" class="btn-glow px-8 py-3 text-[10px] uppercase tracking-widest">Quick Add</button>
                         </div>
+                    </div>
+                    <div class="px-2 pb-2">
+                        <div class="flex justify-between items-start mb-2">
+                            <h4 class="font-bold text-sm tracking-tight">${p.name}</h4>
+                            <span class="text-xs text-blue-500 font-bold italic">${p.cat}</span>
+                        </div>
+                        <p class="text-lg font-modern tracking-tighter text-gray-400">฿${p.price.toLocaleString()}</p>
                     </div>
                 </div>
             `).join('');
-        }
-
-        function filterCategory(cat) {
-            currentCategory = cat;
-            const filtered = cat === 'All' ? products : products.filter(p => p.cat === cat);
-            renderProducts(filtered);
-            
-            // UI Update
-            document.querySelectorAll('.category-pill').forEach(btn => {
-                btn.classList.toggle('active', btn.innerText.includes(cat));
-            });
-        }
-
-        function searchProduct() {
-            const query = document.getElementById('searchBar').value.toLowerCase();
-            const filtered = products.filter(p => p.name.toLowerCase().includes(query));
-            renderProducts(filtered);
         }
 
         function toggleCart() {
-            document.getElementById('cart-sidebar').classList.toggle('translate-x-full');
+            document.getElementById('cart-sidebar').classList.toggle('translate-x-[120%]');
         }
 
-        function quickAdd(id) {
-            const product = products.find(p => p.id === id);
-            const size = prompt("เลือกไซส์ (S, M, L, XL):", "L");
-            if (!size) return;
-            
-            cart.push({ ...product, size, cartId: Date.now() });
-            updateCartUI();
+        function add(id) {
+            const p = products.find(x => x.id === id);
+            cart.push(p);
+            update();
+            toggleCart();
         }
 
-        function updateCartUI() {
+        function update() {
             document.getElementById('cart-count').innerText = cart.length;
-            document.getElementById('item-summary').innerText = `${cart.length} ITEMS SELECTED`;
-            
-            const container = document.getElementById('cart-items');
-            container.innerHTML = cart.map((item, idx) => `
-                <div class="flex gap-4 animate-fadeIn">
-                    <img src="${item.img}" class="w-20 h-24 object-cover rounded-2xl border border-white/5">
-                    <div class="flex-grow">
-                        <div class="flex justify-between">
-                            <h4 class="font-bold text-sm">${item.name}</h4>
-                            <button onclick="removeItem(${idx})" class="text-gray-600 hover:text-red-500"><i class="fas fa-trash"></i></button>
-                        </div>
-                        <p class="text-xs text-blue-400 mt-1 uppercase font-bold">Size: ${item.size}</p>
-                        <p class="text-md font-bold mt-2">฿${item.price.toLocaleString()}</p>
+            document.getElementById('cart-items').innerHTML = cart.map((item, i) => `
+                <div class="flex gap-6 animate-slideIn">
+                    <img src="${item.img}" class="w-20 h-24 rounded-2xl object-cover">
+                    <div class="flex flex-col justify-center flex-grow">
+                        <h5 class="text-xs font-bold uppercase tracking-widest mb-1">${item.name}</h5>
+                        <p class="text-sm font-modern text-blue-500">฿${item.price.toLocaleString()}</p>
                     </div>
+                    <button onclick="remove(${i})" class="text-gray-700 hover:text-white transition"><i class="fa-solid fa-trash-can"></i></button>
                 </div>
             `).join('');
-
-            const total = cart.reduce((sum, i) => sum + i.price, 0);
-            document.getElementById('subtotal').innerText = `฿${total.toLocaleString()}`;
+            
+            const total = cart.reduce((s, x) => s + x.price, 0);
             document.getElementById('total-price').innerText = `฿${total.toLocaleString()}`;
         }
 
-        function removeItem(index) {
-            cart.splice(index, 1);
-            updateCartUI();
+        function remove(i) { cart.splice(i, 1); update(); }
+
+        function filterCat(c) {
+            render(c === 'All' ? products : products.filter(x => x.cat === c));
+            document.querySelectorAll('.nav-link').forEach(l => {
+                l.classList.toggle('active-tab', l.innerText.includes(c));
+            });
         }
 
-        function sendToLine() {
-            if (cart.length === 0) return alert("Your bag is empty!");
-            const total = cart.reduce((sum, i) => sum + i.price, 0);
-            let msg = "🔥 NEW ORDER FROM WEB:\n------------------\n";
-            cart.forEach((item, i) => {
-                msg += `📌 ${item.name} [Size: ${item.size}] - ฿${item.price.toLocaleString()}\n`;
-            });
-            msg += `------------------\n💵 Total Amount: ฿${total.toLocaleString()}\n\nCustomer Details: (Fill in name/address)`;
-            
+        function checkout() {
+            if(!cart.length) return;
+            const msg = `สนใจสั่งซื้อ:\n${cart.map(x => `- ${x.name}`).join('\n')}\nรวม ฿${cart.reduce((s,x)=>s+x.price,0).toLocaleString()}`;
             window.location.href = `https://line.me/R/oaMessage/@YOUR_ID/?${encodeURIComponent(msg)}`;
         }
 
-        renderProducts();
+        render();
     </script>
 </body>
 </html>
