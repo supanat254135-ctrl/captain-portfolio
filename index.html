@@ -3,172 +3,119 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CAPTAIN MEGA ENGINE V.7 | 9 Categories & Sound</title>
+    <title>CAPTAIN CINEMATIC | Next-Gen Retail</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@400;700&family=Outfit:wght@900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
         :root { --accent: #007AFF; --bg: #000; }
-        body { font-family: 'Anuphan', sans-serif; background: var(--bg); color: #fff; overflow-x: hidden; }
+        body { font-family: 'Anuphan', sans-serif; background: var(--bg); color: #fff; }
         .font-modern { font-family: 'Outfit', sans-serif; }
         
-        /* ปุ่มกดแบบเด้ง (Haptic Effect) */
-        .btn-push { transition: all 0.1s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer; position: relative; }
-        .btn-push:active { transform: scale(0.9) !important; filter: brightness(1.2); }
+        /* Glassmorphism & Effects */
+        .glass { background: rgba(10, 10, 10, 0.7); backdrop-filter: blur(25px); border: 1px solid rgba(255,255,255,0.1); }
+        .btn-push { transition: 0.1s; cursor: pointer; }
+        .btn-push:active { transform: scale(0.9); }
         
-        .glass { background: rgba(15, 15, 15, 0.85); backdrop-filter: blur(25px); border: 1px solid rgba(255,255,255,0.08); }
-        .cat-card { border: 1px solid rgba(255,255,255,0.05); transition: 0.3s; white-space: nowrap; }
-        .cat-card.active { background: var(--accent); border-color: var(--accent); box-shadow: 0 0 15px rgba(0, 122, 255, 0.4); }
+        /* Hero Video Section */
+        .hero-video { height: 60vh; position: relative; overflow: hidden; border-radius: 0 0 50px 50px; }
+        .hero-video video { width: 100%; height: 100%; object-fit: cover; opacity: 0.6; }
 
-        /* Animation ตอนเพิ่มของ */
-        @keyframes bounce-in {
-            0% { transform: scale(0.5); opacity: 0; }
-            100% { transform: scale(1); opacity: 1; }
-        }
-        .item-anim { animation: bounce-in 0.3s cubic-bezier(0.17, 0.67, 0.83, 0.67); }
+        /* Toast Notification */
+        #toast { position: fixed; top: 100px; right: 20px; transform: translateX(150%); transition: 0.5s cubic-bezier(0.17, 0.67, 0.83, 0.67); z-index: 200; }
+        #toast.show { transform: translateX(0); }
+
+        .product-card { background: #0f0f0f; border-radius: 30px; transition: 0.4s; }
+        .product-card:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(0, 122, 255, 0.2); }
     </style>
 </head>
 <body>
 
-    <nav class="fixed top-0 w-full z-50 glass px-6 py-5 flex justify-between items-center">
-        <div class="btn-push font-modern text-2xl font-black text-blue-500 italic">CAPTAIN®</div>
+    <div id="toast" class="glass px-6 py-4 rounded-2xl flex items-center gap-4">
+        <div class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center"><i class="fa-solid fa-check"></i></div>
+        <div><p class="text-xs font-bold uppercase">เพิ่มลงตะกร้าแล้ว</p><p class="text-[10px] text-gray-400">สินค้าพร้อมส่งภายใน 24 ชม.</p></div>
+    </div>
+
+    <nav class="fixed top-0 w-full z-50 glass px-8 py-5 flex justify-between items-center">
+        <div class="font-modern text-2xl font-black italic text-blue-500">CAPTAIN®</div>
         <div class="flex gap-6 items-center">
-            <div onclick="playSound('click'); toggleCart();" class="btn-push relative p-2 bg-white/5 rounded-2xl border border-white/10">
-                <i class="fa-solid fa-cart-shopping"></i>
-                <span id="cart-count" class="absolute -top-2 -right-2 bg-blue-600 text-[10px] w-5 h-5 rounded-full flex items-center justify-center font-bold">0</span>
+            <div onclick="toggleCart()" class="btn-push relative p-3 bg-white/5 rounded-2xl border border-white/10">
+                <i class="fa-solid fa-bag-shopping"></i>
+                <span id="cart-count" class="absolute -top-1 -right-1 bg-blue-600 text-[10px] w-5 h-5 rounded-full flex items-center justify-center font-bold">0</span>
             </div>
         </div>
     </nav>
 
-    <div class="pt-28 px-6">
-        <p class="text-[10px] font-bold text-gray-500 uppercase tracking-[0.3em] mb-4">Discovery Center</p>
-        <div class="flex gap-3 overflow-x-auto no-scrollbar pb-4" id="cat-list">
-            </div>
+    <section class="hero-video shadow-2xl">
+        <video autoplay muted loop playsinline>
+            <source src="https://assets.mixkit.co/videos/preview/mixkit-fashion-model-posing-in-neon-lights-34444-large.mp4" type="video/mp4">
+        </video>
+        <div class="absolute inset-0 bg-gradient-to-t from-black to-transparent"></div>
+        <div class="absolute bottom-12 left-12">
+            <h2 class="text-5xl md:text-7xl font-modern font-black italic leading-none">THE NEW <br> STANDARD.</h2>
+            <p class="text-blue-500 font-bold mt-4 tracking-[0.5em] text-xs">COLLECTION 2026 OUT NOW</p>
+        </div>
+    </section>
+
+    <div class="px-8 py-10 flex gap-4 overflow-x-auto no-scrollbar">
+        <button onclick="filter('All')" class="btn-push px-8 py-3 rounded-full glass text-xs font-bold uppercase border-blue-500/50">All Items</button>
+        <button onclick="filter('Tops')" class="btn-push px-8 py-3 rounded-full glass text-xs font-bold uppercase">Shirts</button>
+        <button onclick="filter('Footwear')" class="btn-push px-8 py-3 rounded-full glass text-xs font-bold uppercase">Shoes</button>
+        <button onclick="filter('Accessory')" class="btn-push px-8 py-3 rounded-full glass text-xs font-bold uppercase">Accessories</button>
     </div>
 
-    <main class="px-6 py-4 grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6" id="product-grid">
-        </main>
-
-    <div id="cart-panel" class="fixed right-0 top-0 h-full w-full md:w-[450px] glass z-[100] translate-x-full transition-transform duration-500 p-10 flex flex-col">
-        <div class="flex justify-between items-center mb-10">
-            <h3 class="font-modern text-3xl font-black italic">CART</h3>
-            <button onclick="playSound('click'); toggleCart()" class="btn-push text-3xl">&times;</button>
-        </div>
-        <div id="cart-items" class="flex-grow overflow-y-auto space-y-6"></div>
-        <div class="pt-8 border-t border-white/10">
-            <div class="flex justify-between font-bold text-3xl mb-8">
-                <span class="text-sm text-gray-500 self-center">TOTAL</span>
-                <span id="total-price" class="text-blue-500 font-black">฿0</span>
-            </div>
-            <button onclick="checkout()" class="btn-push w-full bg-blue-600 py-5 rounded-[24px] font-bold uppercase tracking-widest text-sm shadow-xl">
-                Place Order Now
-            </button>
-        </div>
-    </div>
+    <main class="px-8 grid grid-cols-2 md:grid-cols-4 gap-8 pb-32" id="grid"></main>
 
     <script>
-        // --- Sound Engine ---
-        const sfx = {
+        const sfx = { 
             click: new Audio('https://www.soundjay.com/buttons/sounds/button-16.mp3'),
-            add: new Audio('https://www.soundjay.com/buttons/sounds/button-3.mp3'),
-            pop: new Audio('https://www.soundjay.com/buttons/sounds/button-4.mp3')
+            ding: new Audio('https://www.soundjay.com/buttons/sounds/button-3.mp3') 
         };
 
-        function playSound(name) {
-            sfx[name].currentTime = 0;
-            sfx[name].play().catch(() => {});
-        }
-
-        // --- Categories Data (9 หมวดหลัก) ---
-        const categories = ["All", "Tops", "Bottoms", "Women", "Headwear", "Footwear", "Bags", "Accessories", "Seasonal", "Special"];
-        
-        // --- Products Data (ตัวอย่างให้ครบทุกหมวด) ---
         const products = [
-            { id: 1, name: 'Cyber Tee', price: 990, cat: 'Tops', img: 'https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=400' },
-            { id: 2, name: 'Denim X', price: 2400, cat: 'Bottoms', img: 'https://images.unsplash.com/photo-1542272604-787c3835535d?w=400' },
-            { id: 3, name: 'Silk Dress', price: 1890, cat: 'Women', img: 'https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=400' },
-            { id: 4, name: 'Neon Bucket', price: 750, cat: 'Headwear', img: 'https://images.unsplash.com/photo-1576871337622-98d48d365da2?w=400' },
-            { id: 5, name: 'Vortex Shoes', price: 4200, cat: 'Footwear', img: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400' },
-            { id: 6, name: 'Sling Tech', price: 1550, cat: 'Bags', img: 'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=400' },
-            { id: 7, name: 'Cyber Shades', price: 1200, cat: 'Accessories', img: 'https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=400' },
-            { id: 8, name: 'Winter Parka', price: 5900, cat: 'Seasonal', img: 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=400' }
+            { id: 1, name: 'Nova Tee', cat: 'Tops', price: 990, img: 'https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=500' },
+            { id: 2, name: 'Aero Boost', cat: 'Footwear', price: 4500, img: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500' },
+            { id: 3, name: 'Cyber Shades', cat: 'Accessory', price: 1200, img: 'https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=500' },
+            { id: 4, name: 'Cargo Tech', cat: 'Tops', price: 2800, img: 'https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=500' }
         ];
 
-        let cart = [];
-        let currentCat = "All";
+        let cartCount = 0;
 
-        function init() {
-            renderCats();
-            renderProducts();
-        }
-
-        function renderCats() {
-            document.getElementById('cat-list').innerHTML = categories.map(c => `
-                <div onclick="playSound('pop'); setCat('${c}')" class="cat-card btn-push px-6 py-2.5 rounded-2xl text-[11px] font-bold uppercase tracking-widest ${currentCat === c ? 'active' : ''}">${c}</div>
-            `).join('');
-        }
-
-        function setCat(c) {
-            currentCat = c;
-            renderCats();
-            renderProducts(c === "All" ? products : products.filter(p => p.cat === c));
-        }
-
-        function renderProducts(items = products) {
-            document.getElementById('product-grid').innerHTML = items.map(p => `
-                <div class="product-card group bg-[#0a0a0a] rounded-[32px] overflow-hidden p-3 border border-white/5 transition hover:border-blue-500/50">
-                    <div class="relative aspect-[4/5] rounded-[24px] overflow-hidden mb-4">
+        function render(items = products) {
+            document.getElementById('grid').innerHTML = items.map(p => `
+                <div class="product-card p-3 group">
+                    <div class="relative aspect-square rounded-[24px] overflow-hidden mb-5">
                         <img src="${p.img}" class="w-full h-full object-cover">
-                        <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
-                            <button onclick="add(${p.id})" class="btn-push bg-white text-black px-6 py-2 rounded-xl font-bold text-[10px] uppercase">Add to Bag</button>
+                        <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition flex items-center justify-center p-6">
+                            <button onclick="add(${p.id})" class="btn-push w-full bg-white text-black py-3 rounded-xl font-bold text-[10px] uppercase">Add to Bag</button>
                         </div>
                     </div>
                     <div class="px-2">
-                        <p class="text-[9px] text-blue-500 font-bold uppercase tracking-tighter mb-1">${p.cat}</p>
-                        <h4 class="text-xs font-bold uppercase truncate">${p.name}</h4>
-                        <p class="font-modern font-black italic mt-1 text-gray-400">฿${p.price.toLocaleString()}</p>
+                        <h4 class="text-sm font-bold uppercase tracking-tight">${p.name}</h4>
+                        <p class="text-blue-500 font-black italic mt-1">฿${p.price.toLocaleString()}</p>
                     </div>
                 </div>
             `).join('');
         }
 
         function add(id) {
-            playSound('add');
-            const p = products.find(x => x.id === id);
-            cart.push(p);
-            updateUI();
-        }
-
-        function updateUI() {
-            document.getElementById('cart-count').innerText = cart.length;
-            const total = cart.reduce((s, x) => s + x.price, 0);
-            document.getElementById('total-price').innerText = `฿${total.toLocaleString()}`;
+            sfx.ding.play();
+            cartCount++;
+            document.getElementById('cart-count').innerText = cartCount;
             
-            document.getElementById('cart-items').innerHTML = cart.map((item, i) => `
-                <div class="glass p-5 rounded-3xl flex gap-5 items-center item-anim">
-                    <img src="${item.img}" class="w-16 h-16 rounded-2xl object-cover">
-                    <div class="flex-grow">
-                        <h5 class="text-[10px] font-bold uppercase">${item.name}</h5>
-                        <p class="text-blue-500 font-black italic">฿${item.price.toLocaleString()}</p>
-                    </div>
-                    <button onclick="playSound('pop'); cart.splice(${i},1); updateUI();" class="btn-push text-gray-600 p-2"><i class="fa-solid fa-trash"></i></button>
-                </div>
-            `).join('');
+            // Show Toast
+            const toast = document.getElementById('toast');
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
         }
 
-        function toggleCart() {
-            document.getElementById('cart-panel').classList.toggle('translate-x-full');
+        function filter(c) {
+            sfx.click.play();
+            render(c === 'All' ? products : products.filter(p => p.cat === c));
         }
 
-        function checkout() {
-            if(cart.length === 0) return alert("ตะกร้ายังว่างอยู่นะครับ!");
-            playSound('add');
-            alert("ออเดอร์ถูกบันทึกลงระบบแล้วครับ ขอบคุณครับคุณลูกค้า!");
-            cart = []; updateUI(); toggleCart();
-        }
-
-        init();
+        render();
     </script>
 </body>
 </html>
