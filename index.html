@@ -1,116 +1,40 @@
-<!DOCTYPE html>
-<html lang="th">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Monster Biz Cloud v3</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <style>
-        :root { --neon: #00ffcc; --bg: #0a0a0c; --card: #16161a; }
-        body { font-family: sans-serif; background: var(--bg); color: #e2e8f0; margin: 0; padding: 15px; }
-        .card { background: var(--card); border: 1px solid #333; border-radius: 12px; padding: 15px; margin-bottom: 10px; }
-        input { width: 100%; padding: 12px; margin: 5px 0; background: #000; border: 1px solid #444; color: var(--neon); border-radius: 8px; box-sizing: border-box; }
-        button { width: 100%; padding: 14px; background: var(--neon); color: #000; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
-        button:disabled { opacity: 0.5; cursor: wait; }
-        .stat-box { background: #000; padding: 10px; border-radius: 8px; text-align: center; border-bottom: 3px solid var(--neon); flex: 1; }
-        #loadingText { color: var(--neon); text-align: center; font-size: 12px; display: none; }
-    </style>
-</head>
-<body>
+// 🔗 เปลี่ยนตรงนี้ให้เป็น URL ใหม่ที่คุณเพิ่งก๊อปมา
+const URL_API = "ใส่_URL_เว็บแอป_ตัวใหม่ล่าสุดที่นี่"; 
 
-<div style="max-width: 450px; margin: auto;">
-    <h2 style="color: var(--neon); text-align: center;">👾 MONSTER SYSTEM</h2>
-
-    <div style="display: flex; gap: 10px; margin-bottom: 15px;">
-        <div class="stat-box"><small>วันนี้</small><br><b id="tSum">0</b></div>
-        <div class="stat-box"><small>เดือนนี้</small><br><b id="mSum">0</b></div>
-    </div>
-
-    <div class="card"><canvas id="myChart" height="160"></canvas></div>
-
-    <div class="card">
-        <input type="text" id="name" placeholder="ชื่อลูกค้า / รายการ">
-        <input type="number" id="price" placeholder="จำนวนเงิน">
-        <button id="btn" onclick="saveData()">💾 บันทึกข้อมูล</button>
-        <div id="loadingText">⏳ กำลังอัปเดตข้อมูลจาก Cloud...</div>
-    </div>
-</div>
-
-<script>
-    // 🔗 สำคัญ: ต้องเป็น URL ที่ได้จากการ Deploy แบบ "Anyone"
-    const URL_API = "วาง_URL_เว็บแอป_ของคุณที่นี่";
-
-    async function saveData() {
-        const name = document.getElementById('name').value;
-        const price = document.getElementById('price').value;
-        const btn = document.getElementById('btn');
-        const loader = document.getElementById('loadingText');
-
-        if(!name || !price) return alert("กรุณากรอกข้อมูล");
-
-        btn.disabled = true;
-        loader.style.display = "block";
-
-        const payload = { name, price, month: new Date().toISOString().substring(0, 7) };
-
-        try {
-            // 1. ส่งข้อมูลไปบันทึก
-            await fetch(URL_API, { method: "POST", mode: "no-cors", body: JSON.stringify(payload) });
-            
-            // 2. รอ 2 วินาทีเพื่อให้ Google Sheets ประมวลผลก่อนดึงค่าใหม่
-            setTimeout(() => {
-                alert("บันทึกสำเร็จ!");
-                location.reload(); 
-            }, 2000);
-
-        } catch (e) {
-            alert("บันทึกไม่สำเร็จ");
-            btn.disabled = false;
-            loader.style.display = "none";
+async function loadData() {
+    try {
+        const res = await fetch(URL_API);
+        const data = await res.json();
+        
+        // ตรวจสอบว่ามีข้อมูลจริงไหม (data[0] คือหัวตาราง)
+        if (data && data.length > 1) {
+            renderDashboard(data); 
         }
+    } catch (e) {
+        console.error("ดึงข้อมูลไม่สำเร็จ:", e);
+    }
+}
+
+function renderDashboard(allRows) {
+    const today = new Date().toISOString().split('T')[0];
+    const thisMonth = today.substring(0, 7);
+    
+    let tSum = 0;
+    let mSum = 0;
+
+    // เริ่มวนลูปที่แถวที่ 1 (ข้ามหัวข้อ)
+    for (let i = 1; i < allRows.length; i++) {
+        const row = allRows[i];
+        const dateStr = new Date(row[0]).toISOString().split('T')[0];
+        const price = parseFloat(row[2]) || 0; // ยอดเงินอยู่คอลัมน์ที่ 3
+        const monthStr = row[3]; // เดือนอยู่คอลัมน์ที่ 4
+
+        if (dateStr === today) tSum += price;
+        if (monthStr === thisMonth) mSum += price;
     }
 
-    async function loadData() {
-        try {
-            const res = await fetch(URL_API);
-            const data = await res.json();
-            if (data && data.length > 1) {
-                renderDashboard(data.slice(1)); // ตัดหัวตารางออกแล้วส่งไปวาดกราฟ
-            }
-        } catch (e) {
-            console.log("ยังไม่มีข้อมูลในระบบ");
-        }
-    }
-
-    function renderDashboard(records) {
-        const today = new Date().toISOString().split('T')[0];
-        const thisMonth = today.substring(0, 7);
-        let tSum = 0, mSum = 0, chartMap = {};
-
-        records.forEach(r => {
-            const rDate = new Date(r[0]).toISOString().split('T')[0];
-            const rPrice = parseFloat(r[2]);
-            if(rDate === today) tSum += rPrice;
-            if(r[3] === thisMonth) mSum += rPrice;
-            chartMap[rDate] = (chartMap[rDate] || 0) + rPrice;
-        });
-
-        document.getElementById('tSum').innerText = tSum.toLocaleString();
-        document.getElementById('mSum').innerText = mSum.toLocaleString();
-
-        const labels = Object.keys(chartMap).sort().slice(-7);
-        new Chart(document.getElementById('myChart'), {
-            type: 'line',
-            data: {
-                labels: labels,
-                datasets: [{ label: 'ยอดขาย', data: labels.map(l => chartMap[l]), borderColor: '#00ffcc', tension: 0.3, fill: false }]
-            },
-            options: { plugins: { legend: { display: false } }, scales: { y: { display: false } } }
-        });
-    }
-
-    // เริ่มทำงานทันทีที่เปิดหน้าเว็บ
-    loadData();
-</script>
-</body>
-</html>
+    // แสดงผลบนหน้าจอ
+    document.getElementById('tSum').innerText = tSum.toLocaleString();
+    document.getElementById('mSum').innerText = mSum.toLocaleString();
+}
+        
