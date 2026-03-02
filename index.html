@@ -3,218 +3,144 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CAPTAIN ENTERPRISE | Clothing Management System</title>
+    <title>CAPTAIN MEGA STORE | Global Inventory</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@300;400;600;700&family=Outfit:wght@700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@400;700&family=Outfit:wght@900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
     <style>
-        :root { --accent: #007AFF; --bg: #050505; --card: #111111; }
-        body { font-family: 'Anuphan', sans-serif; background: var(--bg); color: #fff; scroll-behavior: smooth; }
+        :root { --accent: #007AFF; --bg: #000; }
+        body { font-family: 'Anuphan', sans-serif; background: var(--bg); color: #fff; }
         .font-modern { font-family: 'Outfit', sans-serif; }
-        .glass { background: rgba(17, 17, 17, 0.8); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.05); }
-        .btn-glow { background: var(--accent); box-shadow: 0 0 20px rgba(0, 122, 255, 0.4); transition: 0.3s; }
-        .btn-glow:hover { transform: scale(1.02); box-shadow: 0 0 30px rgba(0, 122, 255, 0.6); }
-        .tab-content { display: none; }
-        .tab-content.active { display: block; }
+        .glass { background: rgba(20, 20, 20, 0.9); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.1); }
+        .category-card { transition: 0.3s; cursor: pointer; border: 1px solid rgba(255,255,255,0.05); }
+        .category-card:hover, .category-card.active { border-color: var(--accent); background: rgba(0, 122, 255, 0.1); }
     </style>
 </head>
 <body>
 
-    <nav class="fixed left-0 top-0 h-full w-20 md:w-64 glass border-r border-white/5 z-50 flex flex-col">
-        <div class="p-8 text-center md:text-left">
-            <h1 class="text-xl font-black font-modern tracking-tighter text-blue-500">CAPTAIN®</h1>
+    <nav class="fixed top-0 w-full z-50 glass px-6 py-4 flex justify-between items-center">
+        <h1 class="text-2xl font-black font-modern text-blue-500">CAPTAIN®</h1>
+        <div class="flex-grow max-w-md mx-8">
+            <input type="text" onkeyup="searchItems(this.value)" placeholder="ค้นหาสินค้า (รองเท้า, หมวก, เสื้อ...)" class="w-full bg-white/5 border border-white/10 rounded-full px-6 py-2 text-sm outline-none focus:border-blue-500">
         </div>
-        <div class="flex-grow space-y-2 px-4">
-            <button onclick="switchTab('store')" class="w-full flex items-center gap-4 p-4 rounded-2xl hover:bg-white/5 transition text-gray-400 hover:text-white">
-                <i class="fa-solid fa-shop"></i> <span class="hidden md:block font-bold">หน้าร้าน (Store)</span>
-            </button>
-            <button onclick="switchTab('cart')" class="w-full flex items-center gap-4 p-4 rounded-2xl hover:bg-white/5 transition text-gray-400 hover:text-white">
-                <i class="fa-solid fa-cart-shopping"></i> <span class="hidden md:block font-bold">ตะกร้าสินค้า</span>
-            </button>
-            <button onclick="switchTab('admin')" class="w-full flex items-center gap-4 p-4 rounded-2xl bg-blue-600/10 text-blue-500 border border-blue-500/20">
-                <i class="fa-solid fa-chart-line"></i> <span class="hidden md:block font-bold">หลังบ้าน (Admin)</span>
-            </button>
-        </div>
-        <div class="p-6 border-t border-white/5">
-            <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-blue-500 to-purple-500"></div>
-                <div class="hidden md:block text-xs"><p class="font-bold">Admin User</p><p class="text-gray-500">VIP Status</p></div>
-            </div>
+        <div class="flex gap-6">
+            <button onclick="toggleTab('cart')" class="relative"><i class="fa-solid fa-cart-shopping"></i><span id="cart-count" class="absolute -top-2 -right-2 bg-blue-600 text-[10px] w-4 h-4 rounded-full flex items-center justify-center">0</span></button>
+            <button onclick="toggleTab('admin')"><i class="fa-solid fa-user-gear"></i></button>
         </div>
     </nav>
 
-    <main class="ml-20 md:ml-64 p-8">
-        
-        <section id="store" class="tab-content active animate-fadeIn">
-            <header class="mb-12 flex justify-between items-end">
-                <div>
-                    <p class="text-blue-500 font-bold text-xs uppercase tracking-widest mb-2">Inventory System Active</p>
-                    <h2 class="text-4xl font-black font-modern italic uppercase">Collection 2026</h2>
-                </div>
-                <div class="flex gap-4">
-                    <input type="text" placeholder="ค้นหาสินค้า..." class="bg-white/5 border border-white/10 px-4 py-2 rounded-xl text-sm focus:border-blue-500 outline-none">
-                </div>
-            </header>
+    <main class="pt-28 px-6 pb-20">
+        <div class="flex gap-4 overflow-x-auto pb-8 no-scrollbar">
+            <div onclick="filterCat('All')" class="category-card active px-8 py-3 rounded-2xl whitespace-nowrap font-bold text-sm uppercase">All Items</div>
+            <div onclick="filterCat('Apparel')" class="category-card px-8 py-3 rounded-2xl whitespace-nowrap font-bold text-sm uppercase">👕 Apparel</div>
+            <div onclick="filterCat('Footwear')" class="category-card px-8 py-3 rounded-2xl whitespace-nowrap font-bold text-sm uppercase">👟 Footwear</div>
+            <div onclick="filterCat('Headwear')" class="category-card px-8 py-3 rounded-2xl whitespace-nowrap font-bold text-sm uppercase">🧢 Headwear</div>
+            <div onclick="filterCat('Accessory')" class="category-card px-8 py-3 rounded-2xl whitespace-nowrap font-bold text-sm uppercase">🕶 Accessories</div>
+        </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="product-grid">
-                </div>
-        </section>
-
-        <section id="admin" class="tab-content">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
-                <div class="glass p-6 rounded-[32px]">
-                    <p class="text-gray-500 text-xs font-bold uppercase mb-2">ยอดขายวันนี้</p>
-                    <h3 class="text-3xl font-black font-modern">฿45,200</h3>
-                </div>
-                <div class="glass p-6 rounded-[32px]">
-                    <p class="text-gray-500 text-xs font-bold uppercase mb-2">คำสั่งซื้อใหม่</p>
-                    <h3 class="text-3xl font-black font-modern text-blue-500">12</h3>
-                </div>
-                <div class="glass p-6 rounded-[32px]">
-                    <p class="text-gray-500 text-xs font-bold uppercase mb-2">สต็อกใกล้หมด</p>
-                    <h3 class="text-3xl font-black font-modern text-red-500">3</h3>
-                </div>
-                <div class="glass p-6 rounded-[32px]">
-                    <p class="text-gray-500 text-xs font-bold uppercase mb-2">จำนวนสมาชิก</p>
-                    <h3 class="text-3xl font-black font-modern">1,024</h3>
-                </div>
+        <div id="product-grid" class="grid grid-cols-2 md:grid-cols-4 gap-6">
             </div>
-
-            <div class="glass p-8 rounded-[40px]">
-                <div class="flex justify-between items-center mb-8">
-                    <h3 class="text-xl font-bold uppercase tracking-tighter">จัดการสต็อกแยกไซซ์/สี (SKU Management)</h3>
-                    <button class="bg-white text-black px-6 py-2 rounded-xl font-bold text-xs hover:bg-blue-500 hover:text-white transition">+ เพิ่มสินค้าใหม่</button>
-                </div>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left">
-                        <thead>
-                            <tr class="text-gray-500 text-xs uppercase border-b border-white/5">
-                                <th class="pb-4">สินค้า</th>
-                                <th class="pb-4">หมวดหมู่</th>
-                                <th class="pb-4">สต็อก (S/M/L/XL)</th>
-                                <th class="pb-4">ราคา</th>
-                                <th class="pb-4">สถานะ</th>
-                            </tr>
-                        </thead>
-                        <tbody class="text-sm">
-                            <tr class="border-b border-white/5">
-                                <td class="py-6 font-bold uppercase">Tech-Core Tee</td>
-                                <td>T-Shirt</td>
-                                <td><span class="text-blue-500">10</span> / <span class="text-blue-500">5</span> / <span class="text-red-500">0</span> / <span class="text-blue-500">8</span></td>
-                                <td class="font-modern italic">฿890</td>
-                                <td><span class="bg-green-500/10 text-green-500 px-3 py-1 rounded-full text-[10px] font-bold">ONLINE</span></td>
-                            </tr>
-                            <tr class="border-b border-white/5">
-                                <td class="py-6 font-bold uppercase">Ghost Hoodie</td>
-                                <td>Outerwear</td>
-                                <td><span class="text-blue-500">4</span> / <span class="text-blue-500">12</span> / <span class="text-blue-500">6</span> / <span class="text-blue-500">2</span></td>
-                                <td class="font-modern italic">฿2,490</td>
-                                <td><span class="bg-green-500/10 text-green-500 px-3 py-1 rounded-full text-[10px] font-bold">ONLINE</span></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </section>
-
-        <section id="cart" class="tab-content">
-            <div class="max-w-4xl mx-auto">
-                <h2 class="text-4xl font-black font-modern italic mb-10">CHECKOUT SYSTEM</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
-                    <div class="space-y-6" id="checkout-items">
-                        </div>
-                    <div class="glass p-8 rounded-[40px] h-fit">
-                        <h4 class="text-lg font-bold mb-6">สรุปคำสั่งซื้อ</h4>
-                        <div class="space-y-4 text-sm text-gray-400 mb-8">
-                            <div class="flex justify-between"><span>ยอดรวม</span><span id="subtotal">฿0</span></div>
-                            <div class="flex justify-between"><span>ค่าจัดส่ง (Flash Express)</span><span>฿50</span></div>
-                            <div class="flex justify-between text-white font-bold text-xl pt-4 border-t border-white/5">
-                                <span>ยอดสุทธิ</span><span id="final-total">฿0</span>
-                            </div>
-                        </div>
-                        <p class="text-[10px] uppercase font-bold text-blue-500 mb-2">วิธีชำระเงิน</p>
-                        <select class="w-full bg-white/5 border border-white/10 p-4 rounded-2xl mb-6 outline-none">
-                            <option>โอนผ่านธนาคาร / QR PromptPay</option>
-                            <option>บัตรเครดิต (Stripe Online)</option>
-                            <option>เก็บเงินปลายทาง (COD)</option>
-                        </select>
-                        <button onclick="alert('ระบบกำลังบันทึกออเดอร์ลง Database...')" class="w-full btn-glow py-4 rounded-2xl font-bold uppercase tracking-widest text-sm italic">ยืนยันการสั่งซื้อ & ชำระเงิน</button>
-                    </div>
-                </div>
-            </div>
-        </section>
-
     </main>
 
+    <div id="checkout-panel" class="fixed inset-0 z-[100] glass hidden p-8 overflow-y-auto">
+        <div class="max-w-4xl mx-auto">
+            <div class="flex justify-between mb-10">
+                <h2 class="text-4xl font-black italic">CHECKOUT & PAYMENT</h2>
+                <button onclick="toggleTab('cart')" class="text-3xl">&times;</button>
+            </div>
+            <div class="grid md:grid-cols-2 gap-12">
+                <div id="cart-list" class="space-y-4"></div>
+                <div class="glass p-8 rounded-[40px] border-blue-500/30">
+                    <h3 class="font-bold mb-6">สรุปการสั่งซื้อ</h3>
+                    <div class="space-y-3 text-sm text-gray-400 mb-6 border-b border-white/10 pb-6">
+                        <div class="flex justify-between"><span>ยอดรวม</span><span id="subtotal">฿0</span></div>
+                        <div class="flex justify-between"><span>ภาษี (7%)</span><span id="tax">฿0</span></div>
+                        <div class="flex justify-between text-white font-bold text-xl"><span>รวมสุทธิ</span><span id="total">฿0</span></div>
+                    </div>
+                    <p class="text-xs font-bold mb-4 uppercase text-blue-500">เลือกช่องทางชำระเงิน</p>
+                    <div class="grid grid-cols-2 gap-4 mb-6">
+                        <button class="glass p-4 rounded-2xl hover:border-blue-500 transition text-[10px] font-bold uppercase tracking-widest">PromptPay / QR</button>
+                        <button class="glass p-4 rounded-2xl hover:border-blue-500 transition text-[10px] font-bold uppercase tracking-widest">Credit Card</button>
+                    </div>
+                    <button onclick="confirmOrder()" class="w-full bg-blue-600 py-4 rounded-2xl font-black uppercase tracking-widest italic">ยืนยันการสั่งซื้อ</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
+        // ฐานข้อมูลสินค้าแบบหลากหลาย (ขยายได้ไม่จำกัด)
         const products = [
-            { id: 1, name: 'Tech-Core Tee', price: 890, cat: 'T-Shirt', img: 'https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=800', stock: {S:10, M:5, L:0, XL:8} },
-            { id: 2, name: 'Ghost Hoodie', price: 2490, cat: 'Outerwear', img: 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=800', stock: {S:4, M:12, L:6, XL:2} },
-            { id: 3, name: 'Cyber Cargo', price: 3200, cat: 'Pants', img: 'https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=800', stock: {S:2, M:0, L:5, XL:0} }
+            { id: 1, name: 'Vortex Oversize', price: 990, cat: 'Apparel', img: 'https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=400' },
+            { id: 2, name: 'Neon Runner X1', price: 4500, cat: 'Footwear', img: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400' },
+            { id: 3, name: 'Cyber Trucker Hat', price: 1200, cat: 'Headwear', img: 'https://images.unsplash.com/photo-1588850567047-1845a9ee0280?w=400' },
+            { id: 4, name: 'Future Shades', price: 2800, cat: 'Accessory', img: 'https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=400' },
+            { id: 5, name: 'Shadow Cargo', price: 3200, cat: 'Apparel', img: 'https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=400' },
+            { id: 6, name: 'Urban Glide Shoes', price: 3800, cat: 'Footwear', img: 'https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?w=400' }
         ];
 
         let cart = [];
 
-        function renderStore() {
+        function renderProducts(items = products) {
             const grid = document.getElementById('product-grid');
-            grid.innerHTML = products.map(p => `
-                <div class="glass rounded-[40px] overflow-hidden group">
-                    <div class="relative aspect-[3/4] overflow-hidden">
-                        <img src="${p.img}" class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110">
-                        <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-6">
-                            <div class="flex gap-2 mb-4">
-                                ${Object.keys(p.stock).map(size => `
-                                    <button onclick="addToCart(${p.id}, '${size}')" class="flex-grow py-2 rounded-xl border border-white/20 text-[10px] font-bold hover:bg-blue-600 ${p.stock[size] === 0 ? 'opacity-20 pointer-events-none' : ''}">${size}</button>
-                                `).join('')}
-                            </div>
-                        </div>
+            grid.innerHTML = items.map(p => `
+                <div class="glass rounded-[32px] overflow-hidden p-2 group">
+                    <div class="relative aspect-square rounded-[26px] overflow-hidden">
+                        <img src="${p.img}" class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
+                        <button onclick="addToCart(${p.id})" class="absolute bottom-4 right-4 w-12 h-12 bg-white text-black rounded-full flex items-center justify-center font-bold shadow-xl hover:bg-blue-600 hover:text-white transition"><i class="fa-solid fa-plus"></i></button>
                     </div>
-                    <div class="p-6">
-                        <p class="text-[10px] text-blue-500 font-bold uppercase tracking-widest mb-2">${p.cat}</p>
-                        <h4 class="text-xl font-bold tracking-tight mb-2 uppercase italic">${p.name}</h4>
-                        <p class="text-2xl font-modern font-bold tracking-tighter text-gray-500 italic">฿${p.price.toLocaleString()}</p>
+                    <div class="p-4">
+                        <p class="text-[10px] font-bold text-blue-500 uppercase">${p.cat}</p>
+                        <h4 class="font-bold text-sm uppercase mt-1">${p.name}</h4>
+                        <p class="font-black italic mt-2">฿${p.price.toLocaleString()}</p>
                     </div>
                 </div>
             `).join('');
         }
 
-        function switchTab(tabId) {
-            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-            document.getElementById(tabId).classList.add('active');
+        function filterCat(cat) {
+            renderProducts(cat === 'All' ? products : products.filter(p => p.cat === cat));
+            document.querySelectorAll('.category-card').forEach(c => c.classList.remove('active'));
+            event.currentTarget.classList.add('active');
         }
 
-        function addToCart(pid, size) {
-            const product = products.find(x => x.id === pid);
-            cart.push({...product, selectedSize: size});
+        function addToCart(id) {
+            const p = products.find(x => x.id === id);
+            cart.push(p);
             updateCart();
-            alert(`เพิ่ม ${product.name} ไซซ์ ${size} ลงตะกร้าแล้ว`);
         }
 
         function updateCart() {
-            const container = document.getElementById('checkout-items');
-            if(cart.length === 0) {
-                container.innerHTML = `<div class="py-20 text-center text-gray-600 font-bold uppercase tracking-widest">ว่างเปล่า</div>`;
-            } else {
-                container.innerHTML = cart.map((item, i) => `
-                    <div class="glass p-5 rounded-3xl flex gap-6 items-center">
-                        <img src="${item.img}" class="w-20 h-24 object-cover rounded-2xl">
-                        <div class="flex-grow">
-                            <h5 class="text-sm font-bold uppercase">${item.name}</h5>
-                            <p class="text-xs text-blue-500 font-bold tracking-tighter uppercase mt-1">ไซซ์: ${item.selectedSize}</p>
-                            <p class="text-lg font-modern font-bold mt-2">฿${item.price.toLocaleString()}</p>
-                        </div>
-                        <button onclick="cart.splice(${i},1); updateCart();" class="text-gray-700 hover:text-red-500"><i class="fa-solid fa-trash"></i></button>
-                    </div>
-                `).join('');
-            }
+            document.getElementById('cart-count').innerText = cart.length;
             const sub = cart.reduce((s, x) => s + x.price, 0);
             document.getElementById('subtotal').innerText = `฿${sub.toLocaleString()}`;
-            document.getElementById('final-total').innerText = `฿${(sub + 50).toLocaleString()}`;
+            document.getElementById('tax').innerText = `฿${(sub * 0.07).toLocaleString()}`;
+            document.getElementById('total').innerText = `฿${(sub * 1.07).toLocaleString()}`;
+            
+            document.getElementById('cart-list').innerHTML = cart.map((item, i) => `
+                <div class="flex gap-4 glass p-4 rounded-2xl">
+                    <img src="${item.img}" class="w-16 h-16 rounded-xl object-cover">
+                    <div class="flex-grow"><h5 class="text-xs font-bold uppercase">${item.name}</h5><p class="text-blue-500 font-bold">฿${item.price.toLocaleString()}</p></div>
+                    <button onclick="cart.splice(${i},1); updateCart();" class="text-gray-500"><i class="fa-solid fa-trash"></i></button>
+                </div>
+            `).join('');
         }
 
-        renderStore();
-        updateCart();
+        function toggleTab(id) {
+            document.getElementById('checkout-panel').classList.toggle('hidden');
+        }
+
+        function searchItems(val) {
+            const filtered = products.filter(p => p.name.toLowerCase().includes(val.toLowerCase()) || p.cat.toLowerCase().includes(val.toLowerCase()));
+            renderProducts(filtered);
+        }
+
+        function confirmOrder() {
+            alert("บันทึกคำสั่งซื้อลงระบบหลังบ้าน และส่งข้อมูลไปยัง Line OA เรียบร้อยครับ!");
+            cart = []; updateCart(); toggleTab('cart');
+        }
+
+        renderProducts();
     </script>
 </body>
 </html>
