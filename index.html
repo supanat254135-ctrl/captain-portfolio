@@ -2,122 +2,172 @@
 <html lang="th">
 <head>
     <meta charset="UTF-8">
-    <title>CAPTAIN ENTERPRISE V.11</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CAPTAIN ULTIMATE SYSTEM | 2026</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@400;700&family=Outfit:wght@900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root { --blue: #007AFF; }
-        body { background: #000; color: #fff; font-family: 'Anuphan', sans-serif; overflow: hidden; }
-        .glass { background: rgba(15,15,15,0.95); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.05); }
-        .tab-btn.active { background: var(--blue); color: white; border-color: var(--blue); }
-        .card-stat { background: linear-gradient(145deg, #111, #050505); border: 1px solid rgba(255,255,255,0.03); }
-        .page { display: none; }
-        .page.active { display: block; animation: fadeIn 0.3s ease; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        :root { --blue: #007AFF; --bg: #000; }
+        body { font-family: 'Anuphan', sans-serif; background: var(--bg); color: #fff; overflow: hidden; }
+        .font-modern { font-family: 'Outfit', sans-serif; }
+        .glass { background: rgba(15, 15, 15, 0.9); backdrop-filter: blur(25px); border: 1px solid rgba(255,255,255,0.08); }
+        .page { display: none; height: calc(100vh - 80px); overflow-y: auto; padding-bottom: 100px; }
+        .page.active { display: block; animation: slideUp 0.4s cubic-bezier(0, 0, 0.2, 1); }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .btn-haptic:active { transform: scale(0.92); filter: brightness(1.2); }
+        .nav-active { color: var(--blue); }
+        .cat-tag { background: rgba(0, 122, 255, 0.1); border: 1px solid rgba(0, 122, 255, 0.2); }
     </style>
 </head>
-<body class="flex h-screen">
+<body class="flex flex-col h-screen">
 
-    <nav class="w-72 glass p-8 flex flex-col border-r border-white/5">
-        <div class="mb-12"><h1 class="text-3xl font-black italic text-blue-500">SYSTEM<span class="text-white">X</span></h1></div>
-        
-        <div class="space-y-3 flex-grow">
-            <button onclick="nav('dash')" class="tab-btn active w-full flex items-center gap-4 p-4 rounded-2xl border border-white/5 text-sm font-bold transition">
-                <i class="fa-solid fa-chart-line"></i> Dashboard
-            </button>
-            <button onclick="nav('pos')" class="tab-btn w-full flex items-center gap-4 p-4 rounded-2xl border border-white/5 text-sm font-bold transition">
-                <i class="fa-solid fa-square-poll-vertical"></i> ระบบหน้าร้าน (POS)
-            </button>
-            <button onclick="nav('inv')" class="tab-btn w-full flex items-center gap-4 p-4 rounded-2xl border border-white/5 text-sm font-bold transition">
-                <i class="fa-solid fa-boxes-stacked"></i> จัดการสต็อก (9 หมวด)
-            </button>
-            <button onclick="nav('sett')" class="tab-btn w-full flex items-center gap-4 p-4 rounded-2xl border border-white/5 text-sm font-bold transition">
-                <i class="fa-solid fa-gears"></i> ตั้งค่าระบบจ่ายเงิน
-            </button>
-        </div>
+    <div id="toast" class="fixed top-24 left-1/2 -translate-x-1/2 glass px-6 py-3 rounded-full z-[200] opacity-0 transition-all pointer-events-none">
+        <p class="text-[10px] font-bold uppercase tracking-widest text-blue-500"><i class="fa-solid fa-circle-check mr-2"></i>อัปเดตข้อมูลเรียบร้อย</p>
+    </div>
 
-        <div class="mt-auto p-4 glass rounded-2xl border-blue-500/20 text-center">
-            <p class="text-[10px] text-gray-500 font-bold uppercase">Status: Connected</p>
-            <p class="text-xs text-blue-500 font-bold">Database Alpha-1</p>
+    <nav class="glass px-8 py-5 flex justify-between items-center z-[150]">
+        <div class="font-modern text-2xl font-black italic text-blue-500">CAPTAIN®</div>
+        <div class="flex gap-6 items-center">
+            <div onclick="showPage('cart')" class="btn-haptic relative cursor-pointer">
+                <i class="fa-solid fa-bag-shopping text-xl"></i>
+                <span id="cart-count" class="absolute -top-1 -right-1 bg-blue-600 text-[9px] w-4 h-4 rounded-full flex items-center justify-center font-bold">0</span>
+            </div>
         </div>
     </nav>
 
-    <main class="flex-grow p-12 overflow-y-auto">
+    <main class="flex-grow">
         
-        <div id="dash" class="page active">
-            <div class="flex justify-between items-end mb-12">
-                <div><p class="text-blue-500 font-bold text-xs uppercase tracking-widest mb-2">Business Overview</p>
-                <h2 class="text-5xl font-black italic">CONTROL PANEL</h2></div>
-                <div class="text-right"><p class="text-3xl font-black text-white">฿1,240,500</p><p class="text-[10px] text-green-500 font-bold uppercase">Total Revenue +12%</p></div>
+        <div id="home" class="page active px-6 pt-8">
+            <div class="glass rounded-[40px] p-8 mb-8 bg-gradient-to-br from-blue-900/20 to-transparent">
+                <h2 class="text-5xl font-modern font-black italic leading-none mb-4">NEW<br>ENERGY.</h2>
+                <p class="text-[10px] font-bold tracking-[0.4em] text-blue-500 uppercase">Premium Streetwear 2026</p>
             </div>
+            <h3 class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-6">สินค้าแนะนำ</h3>
+            <div id="home-grid" class="grid grid-cols-2 gap-4"></div>
+        </div>
 
-            <div class="grid grid-cols-3 gap-8 mb-12">
-                <div class="card-stat p-8 rounded-[40px]">
-                    <p class="text-gray-500 text-xs font-bold uppercase mb-4">Orders Today</p>
-                    <h3 class="text-4xl font-black italic">142 <span class="text-sm text-blue-500 italic">Orders</span></h3>
+        <div id="explore" class="page px-6 pt-8">
+            <h2 class="text-3xl font-black italic mb-8">CATEGORIES</h2>
+            <div class="grid grid-cols-2 gap-4" id="cat-grid">
                 </div>
-                <div class="card-stat p-8 rounded-[40px]">
-                    <p class="text-gray-500 text-xs font-bold uppercase mb-4">New Members</p>
-                    <h3 class="text-4xl font-black italic">28 <span class="text-sm text-blue-500 italic">Users</span></h3>
-                </div>
-                <div class="card-stat p-8 rounded-[40px]">
-                    <p class="text-gray-500 text-xs font-bold uppercase mb-4">Stock Value</p>
-                    <h3 class="text-4xl font-black italic">฿4.2M</h3>
-                </div>
-            </div>
+        </div>
 
+        <div id="cart" class="page px-6 pt-8">
+            <h2 class="text-3xl font-black italic mb-8">YOUR BAG</h2>
+            <div id="cart-list" class="space-y-4 mb-8"></div>
             <div class="glass p-8 rounded-[40px]">
-                <h4 class="font-bold mb-6 uppercase text-sm italic tracking-widest">Recent Activity</h4>
-                <div class="space-y-4" id="log-list">
-                    </div>
+                <div class="flex justify-between text-2xl font-black italic mb-6">
+                    <span class="text-xs text-gray-500 uppercase self-center">Total</span>
+                    <span id="total-price" class="text-blue-500">฿0</span>
+                </div>
+                <button onclick="checkout()" class="btn-haptic w-full bg-blue-600 py-5 rounded-3xl font-bold uppercase tracking-widest text-xs">Checkout Now</button>
             </div>
         </div>
 
-        <div id="pos" class="page">
-            <h2 class="text-4xl font-black italic mb-8">POINT OF SALE</h2>
-            <div class="grid grid-cols-4 gap-6" id="pos-grid"></div>
+        <div id="admin" class="page px-6 pt-8">
+            <div class="flex justify-between items-center mb-10">
+                <h2 class="text-3xl font-black italic">DASHBOARD</h2>
+                <span class="text-[9px] bg-green-500/20 text-green-500 px-3 py-1 rounded-full font-bold">LIVE ONLINE</span>
+            </div>
+            <div class="grid grid-cols-2 gap-4 mb-8">
+                <div class="glass p-6 rounded-3xl text-center"><p class="text-[10px] text-gray-500 mb-2 font-bold uppercase">ยอดขายวันนี้</p><h4 class="text-xl font-black">฿42,500</h4></div>
+                <div class="glass p-6 rounded-3xl text-center"><p class="text-[10px] text-gray-500 mb-2 font-bold uppercase">ออเดอร์ใหม่</p><h4 class="text-xl font-black">18 รายการ</h4></div>
+            </div>
+            <h3 class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-4">รายการสต็อก (9 หมวด)</h3>
+            <div class="glass rounded-3xl overflow-hidden" id="stock-list"></div>
         </div>
 
     </main>
 
+    <nav class="fixed bottom-0 w-full glass flex justify-around py-5 z-[150] border-t border-white/5">
+        <button onclick="showPage('home')" class="nav-btn btn-haptic nav-active"><i class="fa-solid fa-house"></i></button>
+        <button onclick="showPage('explore')" class="nav-btn btn-haptic"><i class="fa-solid fa-list-ul"></i></button>
+        <button onclick="showPage('admin')" class="nav-btn btn-haptic"><i class="fa-solid fa-chart-simple"></i></button>
+        <button onclick="showPage('cart')" class="nav-btn btn-haptic"><i class="fa-solid fa-user"></i></button>
+    </nav>
+
     <script>
-        function nav(id) {
+        const sfx = { click: new Audio('https://www.soundjay.com/buttons/sounds/button-16.mp3'), success: new Audio('https://www.soundjay.com/buttons/sounds/button-3.mp3') };
+        
+        const products = [
+            { id: 1, name: 'Cyber Tee', cat: 'เสื้อ (Tops)', price: 990, img: 'https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=400' },
+            { id: 2, name: 'Denim Raw', cat: 'กางเกง (Bottoms)', price: 2400, img: 'https://images.unsplash.com/photo-1542272604-787c3835535d?w=400' },
+            { id: 3, name: 'Aero Boot', cat: 'รองเท้า (Footwear)', price: 4200, img: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400' },
+            { id: 4, name: 'Neon Cap', cat: 'หมวก (Headwear)', price: 750, img: 'https://images.unsplash.com/photo-1588850567047-1845a9ee0280?w=400' }
+        ];
+
+        const cats = ["เสื้อ (Tops)", "กางเกง (Bottoms)", "ผู้หญิง (Women)", "หมวก (Headwear)", "รองเท้า (Footwear)", "กระเป๋า (Bags)", "แอคเซสซอรี่", "ฤดูกาล", "พิเศษ"];
+
+        let cart = [];
+
+        function showPage(id) {
+            sfx.click.play();
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             document.getElementById(id).classList.add('active');
-            event.currentTarget.classList.add('active');
+            
+            // Notification Toast
+            const toast = document.getElementById('toast');
+            toast.style.opacity = '1'; toast.style.top = '100px';
+            setTimeout(() => { toast.style.opacity = '0'; toast.style.top = '24px'; }, 1500);
         }
 
-        const logs = [
-            { t: '16:40', m: 'New Order #9904 (฿4,500)', s: 'Success' },
-            { t: '16:35', m: 'Stock Update: Aero Shoes (+50)', s: 'Update' },
-            { t: '16:30', m: 'Payment Gateway Synchronized', s: 'System' }
-        ];
-
-        document.getElementById('log-list').innerHTML = logs.map(l => `
-            <div class="flex justify-between items-center py-4 border-b border-white/5">
-                <div class="flex gap-4">
-                    <span class="text-gray-600 font-mono text-xs">${l.t}</span>
-                    <p class="text-xs font-bold uppercase">${l.m}</p>
+        function init() {
+            // Render Home
+            document.getElementById('home-grid').innerHTML = products.map(p => `
+                <div class="glass p-3 rounded-[32px] btn-haptic" onclick="addToCart(${p.id})">
+                    <img src="${p.img}" class="rounded-[24px] mb-4 aspect-square object-cover">
+                    <p class="text-[8px] text-blue-500 font-bold uppercase mb-1">${p.cat}</p>
+                    <h4 class="text-[10px] font-bold uppercase truncate">${p.name}</h4>
+                    <p class="text-sm font-black italic">฿${p.price.toLocaleString()}</p>
                 </div>
-                <span class="text-[9px] font-bold px-3 py-1 rounded-full bg-blue-500/10 text-blue-500">${l.s}</span>
-            </div>
-        `).join('');
+            `).join('');
 
-        const items = [
-            { n: 'Vortex Tee', p: 990, img: 'https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=400' },
-            { n: 'Cyber Boot', p: 4200, img: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400' },
-            { n: 'Neon Hat', p: 1200, img: 'https://images.unsplash.com/photo-1588850567047-1845a9ee0280?w=400' },
-            { n: 'Sling Bag', p: 1500, img: 'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=400' }
-        ];
+            // Render 9 Categories
+            document.getElementById('cat-grid').innerHTML = cats.map(c => `
+                <div class="glass p-8 rounded-[32px] text-center btn-haptic">
+                    <p class="text-[10px] font-bold uppercase tracking-widest">${c}</p>
+                </div>
+            `).join('');
 
-        document.getElementById('pos-grid').innerHTML = items.map(i => `
-            <div class="glass p-4 rounded-3xl text-center">
-                <img src="${i.img}" class="rounded-2xl mb-4 aspect-square object-cover">
-                <h4 class="text-[10px] font-bold uppercase truncate">${i.n}</h4>
-                <p class="text-blue-500 font-black italic">฿${i.p.toLocaleString()}</p>
-            </div>
-        `).join('');
+            // Render Stock
+            document.getElementById('stock-list').innerHTML = cats.map(c => `
+                <div class="flex justify-between p-5 border-b border-white/5 text-[10px] font-bold">
+                    <span>${c}</span><span class="text-blue-500">พร้อมจำหน่าย</span>
+                </div>
+            `).join('');
+        }
+
+        function addToCart(id) {
+            sfx.success.play();
+            const p = products.find(x => x.id === id);
+            cart.push(p);
+            updateCart();
+        }
+
+        function updateCart() {
+            document.getElementById('cart-count').innerText = cart.length;
+            const total = cart.reduce((s, x) => s + x.price, 0);
+            document.getElementById('total-price').innerText = `฿${total.toLocaleString()}`;
+            
+            document.getElementById('cart-list').innerHTML = cart.map((item, i) => `
+                <div class="glass p-5 rounded-3xl flex gap-5 items-center">
+                    <img src="${item.img}" class="w-12 h-12 rounded-xl object-cover">
+                    <div class="flex-grow"><h5 class="text-[10px] font-bold uppercase">${item.name}</h5><p class="text-blue-500 font-bold italic">฿${item.price.toLocaleString()}</p></div>
+                    <button onclick="cart.splice(${i},1); updateCart();" class="text-gray-600"><i class="fa-solid fa-trash"></i></button>
+                </div>
+            `).join('');
+        }
+
+        function checkout() {
+            if(cart.length === 0) return alert("กรุณาเลือกสินค้าก่อนครับ");
+            sfx.success.play();
+            alert("บันทึกคำสั่งซื้อเรียบร้อย! ขอบคุณครับคุณลูกค้า");
+            cart = []; updateCart(); showPage('home');
+        }
+
+        init();
     </script>
 </body>
-</html>
+                    </html>
+                    
