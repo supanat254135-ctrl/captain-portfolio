@@ -3,112 +3,146 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CAPTAIN HUB | Ultimate Retail Engine</title>
+    <title>CAPTAIN INTERACTIVE | Feel the UI</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@400;600;700&family=Outfit:wght@800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@400;700&family=Outfit:wght@900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
-        :root { --blue: #007AFF; --dark: #050505; }
-        body { font-family: 'Anuphan', sans-serif; background: var(--dark); color: #fff; scroll-behavior: smooth; }
-        .font-modern { font-family: 'Outfit', sans-serif; }
-        .glass-nav { background: rgba(5, 5, 5, 0.8); backdrop-filter: blur(30px); border-bottom: 1px solid rgba(255,255,255,0.05); }
-        .category-btn { transition: 0.3s; border: 1px solid rgba(255,255,255,0.05); white-space: nowrap; }
-        .category-btn:hover, .category-btn.active { background: var(--blue); border-color: var(--blue); box-shadow: 0 0 20px rgba(0, 122, 255, 0.3); }
-        .product-card { background: #111; border-radius: 24px; overflow: hidden; transition: 0.4s; border: 1px solid transparent; }
-        .product-card:hover { border-color: var(--blue); transform: translateY(-8px); }
-        /* ซ่อน Scrollbar */
-        .no-scrollbar::-webkit-scrollbar { display: none; }
+        :root { --blue: #007AFF; --dark: #000; }
+        body { font-family: 'Anuphan', sans-serif; background: var(--dark); color: #fff; }
+        
+        /* เอฟเฟกต์ปุ่มกด (Active State) */
+        .interactive-btn { transition: all 0.1s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer; }
+        .interactive-btn:active { transform: scale(0.92); opacity: 0.8; }
+        
+        .glass { background: rgba(20, 20, 20, 0.8); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.08); }
+        .product-card { background: #0a0a0a; border-radius: 28px; transition: 0.3s; border: 1px solid rgba(255,255,255,0.03); }
+        .product-card:hover { border-color: var(--blue); }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
     </style>
 </head>
 <body>
 
-    <nav class="fixed top-0 w-full z-[100] glass-nav px-6 py-4 flex justify-between items-center">
-        <div class="flex items-center gap-4">
-            <h1 class="text-2xl font-black font-modern text-blue-500 tracking-tighter">CAPTAIN HUB</h1>
-        </div>
-        <div class="hidden md:flex flex-grow max-w-xl mx-10">
-            <div class="relative w-full">
-                <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-gray-500"></i>
-                <input type="text" onkeyup="search(this.value)" placeholder="ค้นหาสินค้าจาก 9 หมวดหมู่หลัก..." class="w-full bg-white/5 border border-white/10 rounded-2xl py-2.5 pl-12 pr-4 outline-none focus:border-blue-500 transition text-sm">
-            </div>
-        </div>
-        <div class="flex gap-5 items-center">
-            <div class="relative cursor-pointer" onclick="openCart()">
+    <nav class="fixed top-0 w-full z-50 glass px-6 py-4 flex justify-between items-center">
+        <h1 class="text-xl font-black italic tracking-tighter text-blue-500">CAPTAIN OS</h1>
+        <div class="flex gap-6">
+            <div onclick="playSound('click'); toggleCart()" class="interactive-btn relative p-2">
                 <i class="fa-solid fa-bag-shopping text-xl"></i>
-                <span id="cart-dot" class="absolute -top-1 -right-1 w-2 h-2 bg-blue-500 rounded-full hidden"></span>
+                <span id="cart-count" class="absolute -top-1 -right-1 bg-blue-600 text-[9px] w-4 h-4 rounded-full flex items-center justify-center font-bold">0</span>
             </div>
-            <i class="fa-solid fa-bars text-xl md:hidden"></i>
         </div>
     </nav>
 
-    <div class="pt-24 px-6">
-        <div class="flex gap-3 overflow-x-auto no-scrollbar py-4">
-            <button onclick="filter('All')" class="category-btn active px-6 py-2 rounded-xl text-xs font-bold uppercase">All</button>
-            <button onclick="filter('Tops')" class="category-btn px-6 py-2 rounded-xl text-xs font-bold uppercase">👕 Tops</button>
-            <button onclick="filter('Bottoms')" class="category-btn px-6 py-2 rounded-xl text-xs font-bold uppercase">👖 Bottoms</button>
-            <button onclick="filter('Women')" class="category-btn px-6 py-2 rounded-xl text-xs font-bold uppercase">👗 Women</button>
-            <button onclick="filter('Headwear')" class="category-btn px-6 py-2 rounded-xl text-xs font-bold uppercase">🧢 Headwear</button>
-            <button onclick="filter('Footwear')" class="category-btn px-6 py-2 rounded-xl text-xs font-bold uppercase">👟 Footwear</button>
-            <button onclick="filter('Bags')" class="category-btn px-6 py-2 rounded-xl text-xs font-bold uppercase">🎒 Bags</button>
-            <button onclick="filter('Accessories')" class="category-btn px-6 py-2 rounded-xl text-xs font-bold uppercase">🕶 Accessories</button>
-            <button onclick="filter('Seasonal')" class="category-btn px-6 py-2 rounded-xl text-xs font-bold uppercase">🧥 Seasonal</button>
-            <button onclick="filter('Special')" class="category-btn px-6 py-2 rounded-xl text-xs font-bold uppercase">🏷 Special</button>
+    <main class="pt-24 px-6">
+        <h2 class="text-xs font-bold text-gray-500 uppercase tracking-[0.4em] mb-4">Interactive Catalog</h2>
+        <div id="grid" class="grid grid-cols-2 md:grid-cols-4 gap-6">
+            </div>
+    </main>
+
+    <div id="sidebar" class="fixed right-0 top-0 h-full w-full md:w-[400px] glass z-[100] translate-x-full transition-transform duration-500 p-8 flex flex-col">
+        <div class="flex justify-between items-center mb-8">
+            <h3 class="font-bold text-xl uppercase italic">Your Bag</h3>
+            <button onclick="playSound('click'); toggleCart()" class="text-2xl">&times;</button>
+        </div>
+        <div id="cart-items" class="flex-grow overflow-y-auto space-y-4"></div>
+        <div class="pt-6 border-t border-white/10 mt-6">
+            <div class="flex justify-between font-bold text-2xl mb-6">
+                <span>TOTAL</span>
+                <span id="total-price" class="text-blue-500 font-black">฿0</span>
+            </div>
+            <button onclick="processOrder()" class="interactive-btn w-full bg-blue-600 py-4 rounded-2xl font-bold uppercase tracking-widest text-sm">
+                Confirm Purchase
+            </button>
         </div>
     </div>
 
-    <main class="px-6 py-6 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6" id="main-grid">
-        </main>
-
     <script>
-        // ข้อมูลตัวอย่างครอบคลุมทุกหมวดหมู่ (เพื่อให้ลูกค้าเห็นว่าระบบรองรับจริง)
+        // --- Audio System ---
+        const sounds = {
+            click: new Audio('https://www.soundjay.com/buttons/sounds/button-16.mp3'),
+            success: new Audio('https://www.soundjay.com/buttons/sounds/button-3.mp3'),
+            remove: new Audio('https://www.soundjay.com/buttons/sounds/button-10.mp3')
+        };
+
+        function playSound(type) {
+            sounds[type].currentTime = 0;
+            sounds[type].play().catch(() => {
+                console.log("Audio needs user interaction first");
+            });
+        }
+
+        // --- Data ---
         const products = [
-            { id: 1, name: 'Cyber Oversize', cat: 'Tops', sub: 'เสื้อยืด', price: 990, img: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=500' },
-            { id: 2, name: 'Denim Raw V2', cat: 'Bottoms', sub: 'กางเกงยีนส์', price: 2400, img: 'https://images.unsplash.com/photo-1542272604-787c3835535d?w=500' },
-            { id: 3, name: 'Silk Summer Dress', cat: 'Women', sub: 'เดรส', price: 1890, img: 'https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=500' },
-            { id: 4, name: 'Neon Bucket Hat', cat: 'Headwear', sub: 'หมวกบักเก็ต', price: 750, img: 'https://images.unsplash.com/photo-1576871337622-98d48d365da2?w=500' },
-            { id: 5, name: 'Air Glide Runner', cat: 'Footwear', sub: 'รองเท้าผ้าใบ', price: 4200, img: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500' },
-            { id: 6, name: 'Urban Sling Bag', cat: 'Bags', sub: 'กระเป๋าสะพายข้าง', price: 1550, img: 'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=500' },
-            { id: 7, name: 'Cyber Shades', cat: 'Accessories', sub: 'แว่นตาแฟชั่น', price: 1200, img: 'https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=500' },
-            { id: 8, name: 'Winter Tech-Parka', cat: 'Seasonal', sub: 'เสื้อกันหนาว', price: 5900, img: 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=500' }
+            { id: 1, name: 'Tech Tee', price: 990, img: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400' },
+            { id: 2, name: 'Cyber Shoes', price: 4200, img: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400' },
+            { id: 3, name: 'Neon Cap', price: 1200, img: 'https://images.unsplash.com/photo-1588850567047-1845a9ee0280?w=400' },
+            { id: 4, name: 'Aero Bag', price: 2800, img: 'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=400' }
         ];
 
-        function render(items = products) {
-            const grid = document.getElementById('main-grid');
-            grid.innerHTML = items.map(p => `
-                <div class="product-card group">
-                    <div class="relative aspect-[4/5] overflow-hidden">
-                        <img src="${p.img}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
-                        <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
-                            <button class="w-full bg-white text-black py-2 rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-blue-500 hover:text-white transition">Quick Add</button>
+        let cart = [];
+
+        function render() {
+            document.getElementById('grid').innerHTML = products.map(p => `
+                <div class="product-card p-2 group">
+                    <div class="relative aspect-square rounded-[22px] overflow-hidden mb-4">
+                        <img src="${p.img}" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition">
+                            <button onclick="add(${p.id})" class="interactive-btn bg-white text-black px-6 py-2 rounded-xl font-bold text-xs uppercase">Add to Bag</button>
                         </div>
                     </div>
-                    <div class="p-4">
-                        <div class="flex justify-between items-start mb-1">
-                            <p class="text-[10px] font-bold text-blue-500 uppercase tracking-tighter">${p.sub}</p>
-                        </div>
-                        <h4 class="text-sm font-bold uppercase truncate">${p.name}</h4>
-                        <p class="text-lg font-modern font-bold mt-2 italic text-gray-300">฿${p.price.toLocaleString()}</p>
+                    <div class="px-2 pb-2">
+                        <h4 class="text-sm font-bold uppercase">${p.name}</h4>
+                        <p class="text-blue-500 font-black italic mt-1">฿${p.price.toLocaleString()}</p>
                     </div>
                 </div>
             `).join('');
         }
 
-        function filter(cat) {
-            render(cat === 'All' ? products : products.filter(p => p.cat === cat));
-            document.querySelectorAll('.category-btn').forEach(btn => {
-                btn.classList.toggle('active', btn.innerText.includes(cat));
-            });
+        function toggleCart() {
+            document.getElementById('sidebar').classList.toggle('translate-x-full');
         }
 
-        function search(val) {
-            const filtered = products.filter(p => 
-                p.name.toLowerCase().includes(val.toLowerCase()) || 
-                p.sub.toLowerCase().includes(val.toLowerCase()) ||
-                p.cat.toLowerCase().includes(val.toLowerCase())
-            );
-            render(filtered);
+        function add(id) {
+            playSound('success'); // เล่นเสียงตอนเพิ่มของ
+            const p = products.find(x => x.id === id);
+            cart.push(p);
+            updateCart();
         }
 
+        function remove(index) {
+            playSound('remove'); // เล่นเสียงตอนลบ
+            cart.splice(index, 1);
+            updateCart();
+        }
+
+        function updateCart() {
+            document.getElementById('cart-count').innerText = cart.length;
+            const total = cart.reduce((s, x) => s + x.price, 0);
+            document.getElementById('total-price').innerText = `฿${total.toLocaleString()}`;
+            
+            document.getElementById('cart-items').innerHTML = cart.map((item, i) => `
+                <div class="glass p-4 rounded-2xl flex gap-4 items-center animate-fadeIn">
+                    <img src="${item.img}" class="w-12 h-12 rounded-lg object-cover">
+                    <div class="flex-grow font-bold text-xs uppercase">${item.name}</div>
+                    <button onclick="remove(${i})" class="text-gray-500 hover:text-red-500 p-2"><i class="fa-solid fa-trash-can"></i></button>
+                </div>
+            `).join('');
+        }
+
+        function processOrder() {
+            if(cart.length === 0) return alert("ยังไม่มีสินค้าในตะกร้าครับนาย!");
+            playSound('success');
+            alert("ระบบกำลังบันทึกออเดอร์... ขอบคุณครับ!");
+            cart = [];
+            updateCart();
+            toggleCart();
+        }
+
+        // เริ่มต้นระบบ
         render();
     </script>
 </body>
