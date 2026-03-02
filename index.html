@@ -3,134 +3,176 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CLOTHING BRAND | Modern Streetwear</title>
+    <title>PREMIUM STREETWEAR | Full Commerce System</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@300;400;600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
     <style>
-        :root { --accent: #3b82f6; --dark-bg: #0a0a0c; --card-bg: #16161a; }
+        :root { --accent: #3b82f6; --dark-bg: #050505; --card-bg: #111111; }
         body { font-family: 'Anuphan', sans-serif; background-color: var(--dark-bg); color: #e2e8f0; scroll-behavior: smooth; }
-        .font-modern { font-family: 'Space Grotesk', sans-serif; }
         .blue-gradient { background: linear-gradient(135deg, #60a5fa, #2563eb); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .glass-card { background: var(--card-bg); border: 1px solid rgba(255, 255, 255, 0.05); transition: all 0.3s ease; }
-        .glass-card:hover { border-color: var(--accent); transform: translateY(-5px); }
-        .size-btn.active { background: var(--accent); color: white; border-color: var(--accent); }
+        .glass-card { background: var(--card-bg); border: 1px solid rgba(255, 255, 255, 0.05); transition: 0.3s; }
+        .glass-card:hover { border-color: var(--accent); transform: translateY(-8px); box-shadow: 0 10px 30px rgba(59, 130, 246, 0.2); }
+        .category-pill.active { background: var(--accent); color: white; }
     </style>
 </head>
 <body>
 
-    <nav class="sticky top-0 z-50 px-6 py-4 flex justify-between items-center bg-[#0a0a0c]/90 backdrop-blur-md border-b border-white/5">
-        <h1 class="text-2xl font-bold font-modern blue-gradient">CAPTAIN BRAND</h1>
-        <div class="relative cursor-pointer" onclick="toggleCart()">
-            <i class="fas fa-shopping-bag text-xl"></i>
-            <span id="cart-count" class="absolute -top-2 -right-2 bg-blue-600 text-[10px] px-1.5 rounded-full font-bold text-white">0</span>
+    <div class="bg-blue-600 text-white text-[10px] py-1 text-center font-bold tracking-widest uppercase">
+        Free Shipping on orders over ฿2,000 | New Collection Drop!
+    </div>
+
+    <nav class="sticky top-0 z-50 px-6 py-4 flex justify-between items-center bg-black/80 backdrop-blur-xl border-b border-white/5">
+        <div class="flex items-center gap-8">
+            <h1 class="text-2xl font-bold font-modern blue-gradient tracking-tighter">CAPTAIN®</h1>
+            <div class="hidden lg:flex gap-6 text-xs font-bold uppercase tracking-widest text-gray-400">
+                <button onclick="filterCategory('All')" class="hover:text-white">Shop All</button>
+                <button onclick="filterCategory('T-Shirt')" class="hover:text-white">T-Shirts</button>
+                <button onclick="filterCategory('Hoodie')" class="hover:text-white">Outerwear</button>
+            </div>
+        </div>
+        
+        <div class="flex items-center gap-5">
+            <div class="relative hidden md:block">
+                <input type="text" id="searchBar" onkeyup="searchProduct()" placeholder="Search items..." class="bg-white/5 border border-white/10 rounded-full px-4 py-1.5 text-xs focus:outline-none focus:border-blue-500 w-48">
+                <i class="fas fa-search absolute right-3 top-2 text-gray-500 text-[10px]"></i>
+            </div>
+            <div class="relative cursor-pointer group" onclick="toggleCart()">
+                <i class="fas fa-shopping-cart text-lg group-hover:text-blue-400 transition"></i>
+                <span id="cart-count" class="absolute -top-2 -right-2 bg-blue-600 text-[9px] w-4 h-4 flex items-center justify-center rounded-full font-bold">0</span>
+            </div>
         </div>
     </nav>
 
-    <header class="py-16 px-6 text-center border-b border-white/5">
-        <h2 class="text-4xl md:text-6xl font-bold font-modern mb-4 uppercase tracking-tighter">New <span class="blue-gradient">Collection</span> 2024</h2>
-        <p class="text-gray-400 text-sm md:text-base">ยกระดับการแต่งตัวของคุณด้วยเสื้อผ้าคุณภาพพรีเมียม</p>
-    </header>
-
-    <main class="py-12 px-6 max-w-7xl mx-auto">
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8" id="product-grid">
-            </div>
-    </main>
-
-    <div id="cart-sidebar" class="fixed right-0 top-0 h-full w-full md:w-96 bg-[#16161a] shadow-2xl transform translate-x-full transition-transform duration-300 z-[60] p-6 flex flex-col">
-        <div class="flex justify-between items-center mb-8">
-            <h2 class="text-xl font-bold font-modern">YOUR BAG</h2>
-            <button onclick="toggleCart()" class="text-gray-400"><i class="fas fa-times text-xl"></i></button>
+    <div class="max-w-7xl mx-auto px-6 py-12">
+        
+        <div class="flex gap-3 overflow-x-auto pb-6 md:hidden">
+            <button onclick="filterCategory('All')" class="category-pill active px-5 py-2 rounded-full border border-white/10 text-xs whitespace-nowrap">All Items</button>
+            <button onclick="filterCategory('T-Shirt')" class="category-pill px-5 py-2 rounded-full border border-white/10 text-xs whitespace-nowrap">T-Shirts</button>
+            <button onclick="filterCategory('Hoodie')" class="category-pill px-5 py-2 rounded-full border border-white/10 text-xs whitespace-nowrap">Hoodies</button>
         </div>
-        <div id="cart-items" class="flex-grow overflow-y-auto space-y-4"></div>
-        <div class="pt-6 border-t border-white/10 mt-auto">
-            <div class="flex justify-between text-lg font-bold mb-6">
-                <span>ยอดรวมสุทธิ</span>
-                <span id="total-price" class="blue-gradient">฿0</span>
+
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8" id="product-grid">
             </div>
-            <button onclick="sendToLine()" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-4 rounded-xl font-bold transition flex items-center justify-center gap-2">
-                <i class="fab fa-line text-2xl"></i> สั่งซื้อผ่าน Line (สรุปยอดอัตโนมัติ)
+    </div>
+
+    <div id="cart-sidebar" class="fixed right-0 top-0 h-full w-full md:w-[450px] bg-[#0c0c0c] shadow-2xl transform translate-x-full transition-transform duration-500 z-[100] border-l border-white/10 flex flex-col">
+        <div class="p-6 border-b border-white/5 flex justify-between items-center">
+            <div>
+                <h2 class="text-xl font-bold">Your Selection</h2>
+                <p id="item-summary" class="text-[10px] text-gray-500 uppercase tracking-widest mt-1">0 ITEMS SELECTED</p>
+            </div>
+            <button onclick="toggleCart()" class="w-10 h-10 flex items-center justify-center rounded-full bg-white/5 hover:bg-white/10 transition">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <div id="cart-items" class="flex-grow overflow-y-auto p-6 space-y-6">
+            </div>
+
+        <div class="p-8 bg-[#111] border-t border-white/5">
+            <div class="space-y-2 mb-6 text-sm">
+                <div class="flex justify-between text-gray-400"><span>Subtotal</span><span id="subtotal">฿0</span></div>
+                <div class="flex justify-between text-gray-400"><span>Shipping</span><span>FREE</span></div>
+                <div class="flex justify-between text-xl font-bold pt-4 border-t border-white/5 mt-4">
+                    <span>Total Amount</span>
+                    <span class="blue-gradient" id="total-price">฿0</span>
+                </div>
+            </div>
+            <button onclick="sendToLine()" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-4 rounded-xl font-bold transition-all flex items-center justify-center gap-3">
+                <i class="fab fa-line text-2xl"></i> CONFIRM ORDER VIA LINE
             </button>
         </div>
     </div>
 
     <script>
+        // ขยายรายการสินค้าให้ดูเยอะ (เพิ่มได้ไม่จำกัด)
         const products = [
-            { id: 1, name: 'Oversized Black Tee', price: 590, img: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=500', stock: 'In Stock' },
-            { id: 2, name: 'Street White Hoodie', price: 1290, img: 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=500', stock: 'Limited' },
-            { id: 3, name: 'Vintage Denim Jacket', price: 1890, img: 'https://images.unsplash.com/photo-1523205771623-e0faa4d2813d?w=500', stock: 'In Stock' }
+            { id: 1, name: 'Cyberpunk Tee 1.0', price: 690, cat: 'T-Shirt', img: 'https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=500', tag: 'New' },
+            { id: 2, name: 'Essential Hoodie', price: 1490, cat: 'Hoodie', img: 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=500', tag: 'Sale' },
+            { id: 3, name: 'Dark Side Cargo', price: 1290, cat: 'Pants', img: 'https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=500', tag: '' },
+            { id: 4, name: 'Future Tech Cap', price: 450, cat: 'Accessory', img: 'https://images.unsplash.com/photo-1588850567047-1845a9ee0280?w=500', tag: 'Popular' },
+            { id: 5, name: 'Street Oversize', price: 590, cat: 'T-Shirt', img: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=500', tag: '' },
         ];
 
         let cart = [];
+        let currentCategory = 'All';
 
-        function renderProducts() {
+        function renderProducts(data = products) {
             const grid = document.getElementById('product-grid');
-            grid.innerHTML = products.map(p => `
-                <div class="glass-card rounded-2xl overflow-hidden flex flex-col">
-                    <div class="relative group">
-                        <img src="${p.img}" class="w-full aspect-[3/4] object-cover">
-                        <div class="absolute top-3 right-3 bg-black/60 backdrop-blur-sm px-3 py-1 rounded-full text-[10px] uppercase font-bold text-blue-400 border border-blue-500/30">
-                            ${p.stock}
-                        </div>
+            grid.innerHTML = data.map(p => `
+                <div class="glass-card rounded-3xl overflow-hidden flex flex-col group">
+                    <div class="relative overflow-hidden aspect-[4/5]">
+                        <img src="${p.img}" class="w-full h-full object-cover transition duration-700 group-hover:scale-110">
+                        ${p.tag ? `<span class="absolute top-4 left-4 bg-blue-600 text-[10px] font-bold px-3 py-1 rounded-full">${p.tag}</span>` : ''}
                     </div>
-                    <div class="p-5 flex-grow flex flex-col">
-                        <h3 class="text-xl font-bold mb-1">${p.name}</h3>
-                        <p class="text-blue-400 font-bold font-modern mb-4">฿${p.price.toLocaleString()}</p>
+                    <div class="p-5 flex-grow">
+                        <p class="text-[9px] text-gray-500 font-bold uppercase tracking-widest mb-1">${p.cat}</p>
+                        <h3 class="text-md font-bold mb-3 tracking-tight group-hover:text-blue-400 transition">${p.name}</h3>
                         
-                        <div class="mb-4">
-                            <p class="text-[10px] text-gray-500 uppercase font-bold mb-2">Select Size</p>
-                            <div class="flex gap-2">
-                                ${['S', 'M', 'L', 'XL'].map(size => `
-                                    <button onclick="selectSize(this)" class="size-btn w-10 h-10 rounded-lg border border-white/10 text-xs hover:border-blue-500 transition font-bold">${size}</button>
-                                `).join('')}
-                            </div>
+                        <div class="flex items-center justify-between mt-auto">
+                            <span class="text-lg font-bold font-modern">฿${p.price.toLocaleString()}</span>
+                            <button onclick="quickAdd(${p.id})" class="w-10 h-10 rounded-full bg-white text-black flex items-center justify-center hover:bg-blue-500 hover:text-white transition">
+                                <i class="fas fa-plus text-xs"></i>
+                            </button>
                         </div>
-                        
-                        <button onclick="addToCart(${p.id}, this)" class="mt-auto w-full py-3 bg-white text-black font-bold rounded-xl hover:bg-blue-500 hover:text-white transition">
-                            ใส่ตะกร้า
-                        </button>
                     </div>
                 </div>
             `).join('');
         }
 
-        function selectSize(btn) {
-            const parent = btn.parentElement;
-            parent.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
+        function filterCategory(cat) {
+            currentCategory = cat;
+            const filtered = cat === 'All' ? products : products.filter(p => p.cat === cat);
+            renderProducts(filtered);
+            
+            // UI Update
+            document.querySelectorAll('.category-pill').forEach(btn => {
+                btn.classList.toggle('active', btn.innerText.includes(cat));
+            });
+        }
+
+        function searchProduct() {
+            const query = document.getElementById('searchBar').value.toLowerCase();
+            const filtered = products.filter(p => p.name.toLowerCase().includes(query));
+            renderProducts(filtered);
         }
 
         function toggleCart() {
             document.getElementById('cart-sidebar').classList.toggle('translate-x-full');
         }
 
-        function addToCart(id, btn) {
+        function quickAdd(id) {
             const product = products.find(p => p.id === id);
-            const sizeBtn = btn.parentElement.querySelector('.size-btn.active');
+            const size = prompt("เลือกไซส์ (S, M, L, XL):", "L");
+            if (!size) return;
             
-            if (!sizeBtn) return alert('กรุณาเลือกไซส์ก่อนครับ');
-            
-            cart.push({ ...product, selectedSize: sizeBtn.innerText, cartId: Date.now() });
+            cart.push({ ...product, size, cartId: Date.now() });
             updateCartUI();
-            toggleCart();
         }
 
         function updateCartUI() {
             document.getElementById('cart-count').innerText = cart.length;
+            document.getElementById('item-summary').innerText = `${cart.length} ITEMS SELECTED`;
+            
             const container = document.getElementById('cart-items');
             container.innerHTML = cart.map((item, idx) => `
-                <div class="flex gap-4 bg-white/5 p-3 rounded-xl border border-white/5">
-                    <img src="${item.img}" class="w-16 h-20 object-cover rounded-lg">
+                <div class="flex gap-4 animate-fadeIn">
+                    <img src="${item.img}" class="w-20 h-24 object-cover rounded-2xl border border-white/5">
                     <div class="flex-grow">
-                        <h4 class="text-sm font-bold">${item.name}</h4>
-                        <p class="text-xs text-blue-400">Size: ${item.selectedSize} | ฿${item.price.toLocaleString()}</p>
+                        <div class="flex justify-between">
+                            <h4 class="font-bold text-sm">${item.name}</h4>
+                            <button onclick="removeItem(${idx})" class="text-gray-600 hover:text-red-500"><i class="fas fa-trash"></i></button>
+                        </div>
+                        <p class="text-xs text-blue-400 mt-1 uppercase font-bold">Size: ${item.size}</p>
+                        <p class="text-md font-bold mt-2">฿${item.price.toLocaleString()}</p>
                     </div>
-                    <button onclick="removeItem(${idx})" class="text-gray-500 hover:text-red-400 px-2"><i class="fas fa-trash-alt"></i></button>
                 </div>
             `).join('');
-            
+
             const total = cart.reduce((sum, i) => sum + i.price, 0);
+            document.getElementById('subtotal').innerText = `฿${total.toLocaleString()}`;
             document.getElementById('total-price').innerText = `฿${total.toLocaleString()}`;
         }
 
@@ -140,15 +182,14 @@
         }
 
         function sendToLine() {
-            if (cart.length === 0) return alert("ตะกร้าว่างเปล่าครับ");
+            if (cart.length === 0) return alert("Your bag is empty!");
             const total = cart.reduce((sum, i) => sum + i.price, 0);
-            let msg = "👕 สั่งซื้อสินค้าใหม่:\n------------------\n";
+            let msg = "🔥 NEW ORDER FROM WEB:\n------------------\n";
             cart.forEach((item, i) => {
-                msg += `${i+1}. ${item.name} (ไซส์ ${item.selectedSize}) - ฿${item.price.toLocaleString()}\n`;
+                msg += `📌 ${item.name} [Size: ${item.size}] - ฿${item.price.toLocaleString()}\n`;
             });
-            msg += `------------------\n💰 ยอดรวมทั้งหมด: ฿${total.toLocaleString()}\n\nกรุณาส่งข้อความนี้เพื่อยืนยันออเดอร์ครับ`;
+            msg += `------------------\n💵 Total Amount: ฿${total.toLocaleString()}\n\nCustomer Details: (Fill in name/address)`;
             
-            // เปลี่ยนลิงก์ด้านล่างเป็น ID Line ธุรกิจของคุณ
             window.location.href = `https://line.me/R/oaMessage/@YOUR_ID/?${encodeURIComponent(msg)}`;
         }
 
