@@ -3,193 +3,177 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CAPTAIN OS | Next-Gen Commerce</title>
+    <title>PREMIUM BRAND | Dashboard Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@300;600&family=Inter:wght@400;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@300;400;600;700&family=Outfit:wght@500;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
-        :root { --main-blue: #007AFF; --bg-dark: #000000; --card-glass: rgba(18, 18, 18, 0.8); }
-        body { font-family: 'Anuphan', 'Inter', sans-serif; background: var(--bg-dark); color: #fff; scroll-behavior: smooth; overflow-x: hidden; }
+        :root { --accent: #007AFF; --bg: #000000; --panel: #0a0a0a; }
+        body { font-family: 'Anuphan', sans-serif; background: var(--bg); color: #fff; overflow-x: hidden; }
+        .font-modern { font-family: 'Outfit', sans-serif; }
         
-        /* Glassmorphism Effect */
-        .glass { background: var(--card-glass); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        /* Glassmorphism Cards */
+        .glass-card { background: rgba(20, 20, 20, 0.7); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.05); transition: 0.4s cubic-bezier(0.2, 1, 0.3, 1); }
+        .glass-card:hover { border-color: var(--accent); transform: translateY(-10px); box-shadow: 0 20px 40px rgba(0, 122, 255, 0.15); }
+
+        /* Custom Button */
+        .btn-premium { background: #fff; color: #000; border-radius: 16px; font-weight: 700; transition: 0.3s; position: relative; overflow: hidden; }
+        .btn-premium:hover { background: var(--accent); color: #fff; box-shadow: 0 0 25px rgba(0, 122, 255, 0.5); }
+        .btn-premium:active { transform: scale(0.95); }
+
+        /* Sidebar Animation */
+        #cart-sidebar { transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
+        .active-size { background: var(--accent) !important; color: white !important; border-color: var(--accent) !important; }
         
-        /* ปุ่มสไตล์ Apple (ล้ำและไม่โบราณ) */
-        .btn-apple {
-            background: #fff; color: #000; border-radius: 14px;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); font-weight: 700;
-        }
-        .btn-apple:hover { transform: scale(1.02); background: var(--main-blue); color: #fff; box-shadow: 0 10px 40px rgba(0, 122, 255, 0.4); }
-        .btn-apple:active { transform: scale(0.98); }
-
-        /* Animation ตอนเพิ่มของ */
-        @keyframes popIn { 0% { transform: scale(0.9); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
-        .item-anim { animation: popIn 0.4s ease-out forwards; }
-
-        /* Gradient Background */
-        .bg-glow {
-            position: fixed; width: 60vw; height: 60vw; background: radial-gradient(circle, rgba(0,122,255,0.15) 0%, transparent 70%);
-            top: -20%; right: -10%; z-index: -1; pointer-events: none;
-        }
+        /* สไตล์ Scrollbar */
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-thumb { background: #222; border-radius: 10px; }
     </style>
 </head>
 <body>
-    <div class="bg-glow"></div>
 
-    <nav class="fixed top-0 w-full z-[100] glass border-b border-white/5 px-6 py-4 flex justify-between items-center">
-        <div class="text-xl font-extrabold tracking-tighter uppercase">Captain<span class="text-blue-500">.</span></div>
-        <div class="flex gap-6 items-center">
-            <div id="cart-trigger" onclick="toggleCart()" class="cursor-pointer relative p-2 hover:bg-white/5 rounded-full transition">
-                <i class="fa-solid fa-cart-shopping text-lg"></i>
-                <span id="cart-count" class="absolute top-0 right-0 bg-blue-600 text-[9px] w-4 h-4 flex items-center justify-center rounded-full font-bold">0</span>
+    <nav class="fixed top-0 w-full z-[100] px-8 py-6 flex justify-between items-center backdrop-blur-xl border-b border-white/5">
+        <div class="text-2xl font-bold font-modern tracking-tighter">CAPTAIN<span class="text-blue-500">.</span>STUDIO</div>
+        <div class="flex gap-8 items-center">
+            <div class="relative cursor-pointer group" onclick="toggleCart()">
+                <div class="w-12 h-12 flex items-center justify-center rounded-2xl bg-white/5 border border-white/10 group-hover:border-blue-500 transition">
+                    <i class="fa-solid fa-bag-shopping text-lg"></i>
+                </div>
+                <span id="cart-count" class="absolute -top-1 -right-1 bg-blue-600 text-[10px] w-5 h-5 flex items-center justify-center rounded-full font-bold border-2 border-black">0</span>
             </div>
         </div>
     </nav>
 
-    <div class="max-w-6xl mx-auto px-6 pt-32 pb-20">
-        <header class="mb-12">
-            <h1 class="text-5xl md:text-7xl font-extrabold tracking-tighter mb-4">NEW DROP<span class="text-blue-500">.</span></h1>
-            <p class="text-gray-500 font-medium">สัมผัสประสบการณ์การช้อปปิ้งที่ล้ำสมัยและเสถียรที่สุด</p>
+    <main class="pt-32 pb-20 px-8 max-w-7xl mx-auto">
+        <header class="mb-16">
+            <h2 class="text-blue-500 font-bold tracking-[0.3em] uppercase text-xs mb-4 italic">Spring Collection 2026</h2>
+            <h1 class="text-6xl md:text-8xl font-black font-modern tracking-tighter mb-4">WEAR THE <br> FUTURE<span class="text-blue-500">.</span></h1>
         </header>
 
-        <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
             </div>
-    </div>
+    </main>
 
-    <div id="cart-sidebar" class="fixed right-0 top-0 h-full w-full md:w-[420px] glass shadow-2xl translate-x-full transition-transform duration-500 z-[110] flex flex-col">
+    <div id="cart-sidebar" class="fixed right-0 top-0 h-full w-full md:w-[450px] bg-[#050505] shadow-2xl translate-x-full z-[110] flex flex-col border-l border-white/5">
         <div class="p-8 border-b border-white/5 flex justify-between items-center">
-            <h2 class="text-2xl font-extrabold uppercase italic">Your Bag</h2>
-            <button onclick="toggleCart()" class="text-gray-400 hover:text-white transition text-2xl"><i class="fa-solid fa-xmark"></i></button>
+            <h3 class="text-2xl font-black font-modern uppercase italic">Your Archive</h3>
+            <button onclick="toggleCart()" class="w-12 h-12 flex items-center justify-center rounded-full hover:bg-white/5 transition text-2xl"><i class="fa-solid fa-xmark"></i></button>
         </div>
 
-        <div id="cart-items" class="flex-grow overflow-y-auto p-8 space-y-6">
+        <div id="cart-items" class="flex-grow overflow-y-auto p-8 space-y-8">
             </div>
 
-        <div class="p-8 bg-black/40 border-t border-white/10">
-            <div class="flex justify-between text-2xl font-extrabold mb-8 tracking-tighter">
-                <span>TOTAL</span>
-                <span id="total-price" class="text-blue-500">฿0</span>
+        <div class="p-8 bg-[#080808] border-t border-white/5">
+            <div class="flex justify-between items-end mb-8">
+                <span class="text-gray-500 text-xs font-bold uppercase tracking-widest">Subtotal</span>
+                <span id="total-price" class="text-4xl font-modern font-bold tracking-tighter text-blue-500">฿0</span>
             </div>
-            <button id="checkout-btn" onclick="processCheckout()" class="w-full btn-apple py-5 text-sm uppercase tracking-widest mb-4">
-                ยืนยันการสั่งซื้อ
+            <button onclick="checkout()" class="w-full btn-premium py-5 text-sm uppercase tracking-[0.2em] mb-4">
+                Confirm & Pay via LINE
             </button>
-            <p class="text-[10px] text-center text-gray-500 uppercase tracking-widest">Secure encrypted checkout</p>
+            <p class="text-[9px] text-center text-gray-600 uppercase tracking-widest italic">Shipping worldwide from Bangkok</p>
         </div>
     </div>
 
     <script>
-        // --- ระบบสินค้า (แก้ไขข้อมูลที่นี่) ---
+        // --- ฐานข้อมูลสินค้า (นายเพิ่ม/ลดตรงนี้ได้เลย) ---
         const products = [
-            { id: 101, name: 'TECH-CORE TEE', price: 890, img: 'https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=600', stock: true },
-            { id: 102, name: 'VANTABLACK HOODIE', price: 1690, img: 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=600', stock: true },
-            { id: 103, name: 'CYBER CARGO V2', price: 2200, img: 'https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=600', stock: true }
+            { id: 1, name: 'CYBER-PUNK TEE', price: 990, cat: 'T-Shirt', img: 'https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=800' },
+            { id: 2, name: 'NEON GHOST HOODIE', price: 2490, cat: 'Outerwear', img: 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=800' },
+            { id: 3, name: 'TECH-CARGO V3', price: 3200, cat: 'Pants', img: 'https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=800' },
+            { id: 4, name: 'SILICON BEANIE', price: 550, cat: 'Acc', img: 'https://images.unsplash.com/photo-1576871337622-98d48d365da2?w=800' }
         ];
 
-        let cart = [];
+        let cart = JSON.parse(localStorage.getItem('captain_cart')) || [];
 
-        // --- Core Logic ---
         function renderStore() {
             const grid = document.getElementById('product-grid');
             grid.innerHTML = products.map(p => `
-                <div class="glass rounded-[32px] overflow-hidden group p-2">
-                    <div class="relative overflow-hidden rounded-[26px] aspect-[4/5] mb-4">
-                        <img src="${p.img}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
-                        <div class="absolute inset-0 bg-black/20 group-hover:bg-black/0 transition-colors"></div>
-                    </div>
-                    <div class="p-4">
-                        <h3 class="text-lg font-bold mb-2 tracking-tight">${p.name}</h3>
-                        <div class="flex justify-between items-center">
-                            <span class="text-xl font-extrabold text-blue-500 italic">฿${p.price.toLocaleString()}</span>
-                            <button onclick="addToCart(${p.id})" class="bg-white/10 hover:bg-blue-600 p-3 rounded-2xl transition-all">
-                                <i class="fa-solid fa-plus text-xs"></i>
-                            </button>
+                <div class="glass-card rounded-[40px] p-5 flex flex-col group">
+                    <div class="relative overflow-hidden rounded-[32px] aspect-[3/4] mb-8">
+                        <img src="${p.img}" class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity p-8 flex flex-col justify-end">
+                            <div class="flex gap-2 mb-4">
+                                ${['S', 'M', 'L', 'XL'].map(s => `<button onclick="selectSize(this, ${p.id})" class="size-opt w-10 h-10 rounded-xl border border-white/20 text-[10px] font-bold hover:bg-blue-600 transition">${s}</button>`).join('')}
+                            </div>
+                            <button onclick="add(${p.id})" class="btn-premium py-3 text-[10px] uppercase tracking-widest">Add to Archive</button>
                         </div>
+                    </div>
+                    <div class="px-2">
+                        <p class="text-[10px] text-blue-500 font-bold uppercase tracking-widest mb-2">${p.cat}</p>
+                        <h4 class="text-xl font-bold tracking-tight mb-2 uppercase">${p.name}</h4>
+                        <p class="text-2xl font-modern font-bold tracking-tighter text-gray-400 italic">฿${p.price.toLocaleString()}</p>
                     </div>
                 </div>
             `).join('');
+            updateUI();
+        }
+
+        let selectedSizes = {};
+
+        function selectSize(btn, pid) {
+            const parent = btn.parentElement;
+            parent.querySelectorAll('.size-opt').forEach(b => b.classList.remove('active-size'));
+            btn.classList.add('active-size');
+            selectedSizes[pid] = btn.innerText;
         }
 
         function toggleCart() {
-            const sidebar = document.getElementById('cart-sidebar');
-            sidebar.classList.toggle('translate-x-full');
+            document.getElementById('cart-sidebar').classList.toggle('translate-x-full');
         }
 
-        function addToCart(id) {
-            const product = products.find(p => p.id === id);
-            // สร้าง ID เฉพาะในตะกร้าป้องกันบัคการลบผิดตัว
-            const cartItem = { ...product, cartId: Date.now() }; 
-            cart.push(cartItem);
-            
-            updateCartUI();
-            
-            // Visual Feedback
-            const btn = event.currentTarget;
-            btn.innerHTML = '<i class="fa-solid fa-check text-xs"></i>';
-            setTimeout(() => { btn.innerHTML = '<i class="fa-solid fa-plus text-xs"></i>'; }, 1000);
+        function add(pid) {
+            if (!selectedSizes[pid]) return alert("กรุณาเลือกไซส์ก่อนครับนาย!");
+            const p = products.find(x => x.id === pid);
+            cart.push({ ...p, size: selectedSizes[pid], cartId: Date.now() });
+            save();
+            updateUI();
+            toggleCart();
         }
 
-        function updateCartUI() {
-            const count = document.getElementById('cart-count');
-            const itemsContainer = document.getElementById('cart-items');
-            const totalEl = document.getElementById('total-price');
-            
-            count.innerText = cart.length;
-            
-            if(cart.length === 0) {
-                itemsContainer.innerHTML = `<div class="text-center py-20 text-gray-600 font-bold uppercase tracking-widest">ตะกร้าว่างเปล่า</div>`;
-            } else {
-                itemsContainer.innerHTML = cart.map((item, index) => `
-                    <div class="flex gap-4 item-anim bg-white/5 p-4 rounded-3xl border border-white/5">
-                        <img src="${item.img}" class="w-20 h-24 object-cover rounded-2xl">
-                        <div class="flex-grow flex flex-col justify-center">
-                            <h4 class="text-xs font-bold uppercase mb-1">${item.name}</h4>
-                            <p class="text-blue-500 font-extrabold italic">฿${item.price.toLocaleString()}</p>
-                        </div>
-                        <button onclick="removeItem(${index})" class="text-gray-600 hover:text-red-500 transition px-2"><i class="fa-solid fa-trash-can text-sm"></i></button>
+        function updateUI() {
+            document.getElementById('cart-count').innerText = cart.length;
+            document.getElementById('cart-items').innerHTML = cart.map((item, i) => `
+                <div class="flex gap-6 items-center bg-white/5 p-4 rounded-[24px] border border-white/5 shadow-inner">
+                    <img src="${item.img}" class="w-20 h-24 rounded-2xl object-cover">
+                    <div class="flex flex-col flex-grow">
+                        <h5 class="text-xs font-bold uppercase tracking-widest mb-1">${item.name}</h5>
+                        <p class="text-[10px] text-blue-500 font-bold mb-2 uppercase tracking-tighter">Size: ${item.size}</p>
+                        <p class="text-lg font-modern font-bold">฿${item.price.toLocaleString()}</p>
                     </div>
-                `).join('');
-            }
+                    <button onclick="remove(${i})" class="w-10 h-10 flex items-center justify-center rounded-xl bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white transition"><i class="fa-solid fa-trash-can"></i></button>
+                </div>
+            `).join('');
             
-            const total = cart.reduce((sum, item) => sum + item.price, 0);
-            totalEl.innerText = `฿${total.toLocaleString()}`;
+            const total = cart.reduce((s, x) => s + x.price, 0);
+            document.getElementById('total-price').innerText = `฿${total.toLocaleString()}`;
         }
 
-        function removeItem(index) {
-            cart.splice(index, 1);
-            updateCartUI();
-        }
+        function remove(i) { cart.splice(i, 1); save(); updateUI(); }
+        function save() { localStorage.setItem('captain_cart', JSON.stringify(cart)); }
 
-        // --- แก้บัคตอนซื้อ (The "No-Bug" Checkout) ---
-        function processCheckout() {
-            if (cart.length === 0) {
-                alert("กรุณาเลือกสินค้าก่อนทำการสั่งซื้อครับ!");
-                return;
-            }
+        function checkout() {
+            if(!cart.length) return alert("ตะกร้ายังว่างอยู่ครับ!");
+            
+            const total = cart.reduce((s,x)=>s+x.price,0);
+            let msg = "👕 *NEW ORDER: CAPTAIN STUDIO*\n";
+            msg += "--------------------------\n";
+            cart.forEach((item, i) => {
+                msg += `${i+1}. ${item.name} (${item.size}) - ฿${item.price.toLocaleString()}\n`;
+            });
+            msg += "--------------------------\n";
+            msg += `💰 *TOTAL: ฿${total.toLocaleString()}*\n\n`;
+            msg += "📍 *ที่อยู่จัดส่ง:* (ลูกค้าพิมพ์แจ้งที่นี่)";
 
-            const checkoutBtn = document.getElementById('checkout-btn');
-            checkoutBtn.disabled = true;
-            checkoutBtn.innerText = "กำลังตรวจสอบรายการ...";
-
-            setTimeout(() => {
-                const total = cart.reduce((sum, item) => sum + item.price, 0);
-                let message = "📦 *รายการสั่งซื้อใหม่ (Stable V.4)*\n------------------\n";
-                cart.forEach((item, i) => {
-                    message += `${i+1}. ${item.name} - ฿${item.price.toLocaleString()}\n`;
-                });
-                message += `------------------\n💰 *ยอดรวมทั้งสิ้น: ฿${total.toLocaleString()}*`;
-
-                const lineUrl = `https://line.me/R/oaMessage/@YOUR_ID/?${encodeURIComponent(message)}`;
-                
-                // ล้างตะกร้าหลังส่งค่าสำเร็จป้องกันการสั่งซ้ำ
-                cart = [];
-                updateCartUI();
-                toggleCart();
-                checkoutBtn.disabled = false;
-                checkoutBtn.innerText = "ยืนยันการสั่งซื้อ";
-
-                window.location.href = lineUrl;
-            }, 800);
+            // --- เปลี่ยนไอดีไลน์ลูกค้าที่นี่ ---
+            const lineID = "@YOUR_LINE_ID"; 
+            window.location.href = `https://line.me/R/oaMessage/${lineID}/?${encodeURIComponent(msg)}`;
+            
+            // ล้างตะกร้าหลังสั่งเสร็จ
+            cart = [];
+            save();
+            updateUI();
         }
 
         renderStore();
