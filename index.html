@@ -1,40 +1,158 @@
-// 🔗 เปลี่ยนตรงนี้ให้เป็น URL ใหม่ที่คุณเพิ่งก๊อปมา
-const URL_API = "ใส่_URL_เว็บแอป_ตัวใหม่ล่าสุดที่นี่"; 
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CAPTAIN SHOP | Professional Store</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@300;400;600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
-async function loadData() {
-    try {
-        const res = await fetch(URL_API);
-        const data = await res.json();
-        
-        // ตรวจสอบว่ามีข้อมูลจริงไหม (data[0] คือหัวตาราง)
-        if (data && data.length > 1) {
-            renderDashboard(data); 
+    <style>
+        :root {
+            --accent: #3b82f6;
+            --dark-bg: #0a0a0c;
+            --card-bg: #16161a;
         }
-    } catch (e) {
-        console.error("ดึงข้อมูลไม่สำเร็จ:", e);
-    }
-}
 
-function renderDashboard(allRows) {
-    const today = new Date().toISOString().split('T')[0];
-    const thisMonth = today.substring(0, 7);
-    
-    let tSum = 0;
-    let mSum = 0;
+        body {
+            font-family: 'Anuphan', sans-serif;
+            background-color: var(--dark-bg);
+            color: #e2e8f0;
+            scroll-behavior: smooth;
+        }
 
-    // เริ่มวนลูปที่แถวที่ 1 (ข้ามหัวข้อ)
-    for (let i = 1; i < allRows.length; i++) {
-        const row = allRows[i];
-        const dateStr = new Date(row[0]).toISOString().split('T')[0];
-        const price = parseFloat(row[2]) || 0; // ยอดเงินอยู่คอลัมน์ที่ 3
-        const monthStr = row[3]; // เดือนอยู่คอลัมน์ที่ 4
+        .font-modern { font-family: 'Space Grotesk', sans-serif; }
 
-        if (dateStr === today) tSum += price;
-        if (monthStr === thisMonth) mSum += price;
-    }
+        .blue-gradient {
+            background: linear-gradient(135deg, #60a5fa, #2563eb);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
 
-    // แสดงผลบนหน้าจอ
-    document.getElementById('tSum').innerText = tSum.toLocaleString();
-    document.getElementById('mSum').innerText = mSum.toLocaleString();
-}
-        
+        .btn-primary {
+            background: var(--accent);
+            box-shadow: 0 4px 20px rgba(59, 130, 246, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(59, 130, 246, 0.6);
+        }
+
+        .glass-card {
+            background: var(--card-bg);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: transform 0.3s ease;
+        }
+
+        .glass-card:hover {
+            transform: scale(1.02);
+            border-color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="sticky top-0 z-50 px-6 py-4 flex justify-between items-center bg-[#0a0a0c]/80 backdrop-blur-md border-b border-white/5">
+        <h1 class="text-2xl font-bold font-modern blue-gradient">CAPTAIN SHOP</h1>
+        <div class="space-x-8 hidden md:flex">
+            <a href="#" class="hover:text-blue-400 transition">หน้าแรก</a>
+            <a href="#products" class="hover:text-blue-400 transition">สินค้า</a>
+            <a href="#contact" class="hover:text-blue-400 transition">ติดต่อเรา</a>
+        </div>
+        <div class="relative cursor-pointer" onclick="toggleCart()">
+            <i class="fas fa-shopping-cart text-xl"></i>
+            <span id="cart-count" class="absolute -top-2 -right-2 bg-blue-600 text-[10px] px-1.5 rounded-full">0</span>
+        </div>
+    </nav>
+
+    <section class="py-20 px-6 text-center">
+        <h2 class="text-5xl md:text-7xl font-bold font-modern mb-6">Upgrade Your <span class="blue-gradient">Lifestyle</span></h2>
+        <p class="text-gray-400 max-w-2xl mx-auto mb-8 text-lg">ยินดีต้อนรับสู่ร้านค้าที่รวบรวมสินค้าคุณภาพสูง ในราคาที่คุณจับต้องได้ พร้อมระบบสั่งซื้อที่รวดเร็วที่สุด</p>
+        <a href="#products" class="btn-primary px-8 py-3 rounded-full font-bold inline-block">เลือกดูสินค้าเลย</a>
+    </section>
+
+    <section id="products" class="py-10 px-6 max-w-6xl mx-auto">
+        <h3 class="text-2xl font-bold mb-10 border-l-4 border-blue-500 pl-4">สินค้าแนะนำ</h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8" id="product-list">
+            </div>
+    </section>
+
+    <div id="cart-sidebar" class="fixed right-0 top-0 h-full w-80 bg-[#16161a] shadow-2xl transform translate-x-full transition-transform duration-300 z-[60] p-6 border-l border-white/5">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-xl font-bold">ตะกร้าสินค้า</h2>
+            <button onclick="toggleCart()" class="text-gray-400 hover:text-white"><i class="fas fa-times"></i></button>
+        </div>
+        <div id="cart-items" class="space-y-4 h-[70vh] overflow-y-auto">
+            </div>
+        <div class="absolute bottom-0 left-0 w-full p-6 bg-[#0a0a0c]">
+            <div class="flex justify-between mb-4 font-bold">
+                <span>ยอดรวมทั้งหมด:</span>
+                <span id="total-price" class="text-blue-400">฿0</span>
+            </div>
+            <button onclick="alert('กำลังนำท่านสู่หน้าชำระเงิน...')" class="w-full btn-primary py-3 rounded-xl font-bold">สั่งซื้อสินค้า</button>
+        </div>
+    </div>
+
+    <script>
+        const products = [
+            { id: 1, name: 'Pro Keyboard RGB', price: 2500, img: 'https://images.unsplash.com/photo-1511467687858-23d96c32e4ae?w=400' },
+            { id: 2, name: 'Gaming Mouse', price: 1200, img: 'https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?w=400' },
+            { id: 3, name: 'Headset Pro 7.1', price: 3900, img: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400' }
+        ];
+
+        let cart = [];
+
+        function renderProducts() {
+            const list = document.getElementById('product-list');
+            list.innerHTML = products.map(p => `
+                <div class="glass-card rounded-2xl overflow-hidden p-4">
+                    <img src="${p.img}" class="w-full h-48 object-cover rounded-xl mb-4 shadow-lg">
+                    <h4 class="text-xl font-bold mb-1">${p.name}</h4>
+                    <p class="text-blue-400 font-bold mb-4 font-modern text-lg">฿${p.price.toLocaleString()}</p>
+                    <button onclick="addToCart(${p.id})" class="w-full py-2 bg-white/5 hover:bg-white/10 rounded-lg transition-all text-sm font-semibold">
+                        เพิ่มลงตะกร้า
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        function toggleCart() {
+            const sidebar = document.getElementById('cart-sidebar');
+            sidebar.classList.toggle('translate-x-full');
+        }
+
+        function addToCart(id) {
+            const product = products.find(p => p.id === id);
+            cart.push(product);
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            document.getElementById('cart-count').innerText = cart.length;
+            const cartItems = document.getElementById('cart-items');
+            cartItems.innerHTML = cart.map((item, index) => `
+                <div class="flex justify-between items-center bg-white/5 p-3 rounded-lg border border-white/5">
+                    <div>
+                        <p class="text-sm font-bold">${item.name}</p>
+                        <p class="text-xs text-blue-400">฿${item.price.toLocaleString()}</p>
+                    </div>
+                    <button onclick="removeItem(${index})" class="text-red-400 text-xs"><i class="fas fa-trash"></i></button>
+                </div>
+            `).join('');
+
+            const total = cart.reduce((sum, item) => sum + item.price, 0);
+            document.getElementById('total-price').innerText = `฿${total.toLocaleString()}`;
+        }
+
+        function removeItem(index) {
+            cart.splice(index, 1);
+            updateCartUI();
+        }
+
+        renderProducts();
+    </script>
+</body>
+</html>
