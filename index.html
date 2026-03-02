@@ -3,180 +3,218 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PREMIUM BRAND | Dashboard Edition</title>
+    <title>CAPTAIN ENTERPRISE | Clothing Management System</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@300;400;600;700&family=Outfit:wght@500;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@300;400;600;700&family=Outfit:wght@700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
-        :root { --accent: #007AFF; --bg: #000000; --panel: #0a0a0a; }
-        body { font-family: 'Anuphan', sans-serif; background: var(--bg); color: #fff; overflow-x: hidden; }
+        :root { --accent: #007AFF; --bg: #050505; --card: #111111; }
+        body { font-family: 'Anuphan', sans-serif; background: var(--bg); color: #fff; scroll-behavior: smooth; }
         .font-modern { font-family: 'Outfit', sans-serif; }
-        
-        /* Glassmorphism Cards */
-        .glass-card { background: rgba(20, 20, 20, 0.7); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.05); transition: 0.4s cubic-bezier(0.2, 1, 0.3, 1); }
-        .glass-card:hover { border-color: var(--accent); transform: translateY(-10px); box-shadow: 0 20px 40px rgba(0, 122, 255, 0.15); }
-
-        /* Custom Button */
-        .btn-premium { background: #fff; color: #000; border-radius: 16px; font-weight: 700; transition: 0.3s; position: relative; overflow: hidden; }
-        .btn-premium:hover { background: var(--accent); color: #fff; box-shadow: 0 0 25px rgba(0, 122, 255, 0.5); }
-        .btn-premium:active { transform: scale(0.95); }
-
-        /* Sidebar Animation */
-        #cart-sidebar { transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
-        .active-size { background: var(--accent) !important; color: white !important; border-color: var(--accent) !important; }
-        
-        /* สไตล์ Scrollbar */
-        ::-webkit-scrollbar { width: 5px; }
-        ::-webkit-scrollbar-thumb { background: #222; border-radius: 10px; }
+        .glass { background: rgba(17, 17, 17, 0.8); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.05); }
+        .btn-glow { background: var(--accent); box-shadow: 0 0 20px rgba(0, 122, 255, 0.4); transition: 0.3s; }
+        .btn-glow:hover { transform: scale(1.02); box-shadow: 0 0 30px rgba(0, 122, 255, 0.6); }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
     </style>
 </head>
 <body>
 
-    <nav class="fixed top-0 w-full z-[100] px-8 py-6 flex justify-between items-center backdrop-blur-xl border-b border-white/5">
-        <div class="text-2xl font-bold font-modern tracking-tighter">CAPTAIN<span class="text-blue-500">.</span>STUDIO</div>
-        <div class="flex gap-8 items-center">
-            <div class="relative cursor-pointer group" onclick="toggleCart()">
-                <div class="w-12 h-12 flex items-center justify-center rounded-2xl bg-white/5 border border-white/10 group-hover:border-blue-500 transition">
-                    <i class="fa-solid fa-bag-shopping text-lg"></i>
-                </div>
-                <span id="cart-count" class="absolute -top-1 -right-1 bg-blue-600 text-[10px] w-5 h-5 flex items-center justify-center rounded-full font-bold border-2 border-black">0</span>
+    <nav class="fixed left-0 top-0 h-full w-20 md:w-64 glass border-r border-white/5 z-50 flex flex-col">
+        <div class="p-8 text-center md:text-left">
+            <h1 class="text-xl font-black font-modern tracking-tighter text-blue-500">CAPTAIN®</h1>
+        </div>
+        <div class="flex-grow space-y-2 px-4">
+            <button onclick="switchTab('store')" class="w-full flex items-center gap-4 p-4 rounded-2xl hover:bg-white/5 transition text-gray-400 hover:text-white">
+                <i class="fa-solid fa-shop"></i> <span class="hidden md:block font-bold">หน้าร้าน (Store)</span>
+            </button>
+            <button onclick="switchTab('cart')" class="w-full flex items-center gap-4 p-4 rounded-2xl hover:bg-white/5 transition text-gray-400 hover:text-white">
+                <i class="fa-solid fa-cart-shopping"></i> <span class="hidden md:block font-bold">ตะกร้าสินค้า</span>
+            </button>
+            <button onclick="switchTab('admin')" class="w-full flex items-center gap-4 p-4 rounded-2xl bg-blue-600/10 text-blue-500 border border-blue-500/20">
+                <i class="fa-solid fa-chart-line"></i> <span class="hidden md:block font-bold">หลังบ้าน (Admin)</span>
+            </button>
+        </div>
+        <div class="p-6 border-t border-white/5">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-blue-500 to-purple-500"></div>
+                <div class="hidden md:block text-xs"><p class="font-bold">Admin User</p><p class="text-gray-500">VIP Status</p></div>
             </div>
         </div>
     </nav>
 
-    <main class="pt-32 pb-20 px-8 max-w-7xl mx-auto">
-        <header class="mb-16">
-            <h2 class="text-blue-500 font-bold tracking-[0.3em] uppercase text-xs mb-4 italic">Spring Collection 2026</h2>
-            <h1 class="text-6xl md:text-8xl font-black font-modern tracking-tighter mb-4">WEAR THE <br> FUTURE<span class="text-blue-500">.</span></h1>
-        </header>
+    <main class="ml-20 md:ml-64 p-8">
+        
+        <section id="store" class="tab-content active animate-fadeIn">
+            <header class="mb-12 flex justify-between items-end">
+                <div>
+                    <p class="text-blue-500 font-bold text-xs uppercase tracking-widest mb-2">Inventory System Active</p>
+                    <h2 class="text-4xl font-black font-modern italic uppercase">Collection 2026</h2>
+                </div>
+                <div class="flex gap-4">
+                    <input type="text" placeholder="ค้นหาสินค้า..." class="bg-white/5 border border-white/10 px-4 py-2 rounded-xl text-sm focus:border-blue-500 outline-none">
+                </div>
+            </header>
 
-        <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="product-grid">
+                </div>
+        </section>
+
+        <section id="admin" class="tab-content">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
+                <div class="glass p-6 rounded-[32px]">
+                    <p class="text-gray-500 text-xs font-bold uppercase mb-2">ยอดขายวันนี้</p>
+                    <h3 class="text-3xl font-black font-modern">฿45,200</h3>
+                </div>
+                <div class="glass p-6 rounded-[32px]">
+                    <p class="text-gray-500 text-xs font-bold uppercase mb-2">คำสั่งซื้อใหม่</p>
+                    <h3 class="text-3xl font-black font-modern text-blue-500">12</h3>
+                </div>
+                <div class="glass p-6 rounded-[32px]">
+                    <p class="text-gray-500 text-xs font-bold uppercase mb-2">สต็อกใกล้หมด</p>
+                    <h3 class="text-3xl font-black font-modern text-red-500">3</h3>
+                </div>
+                <div class="glass p-6 rounded-[32px]">
+                    <p class="text-gray-500 text-xs font-bold uppercase mb-2">จำนวนสมาชิก</p>
+                    <h3 class="text-3xl font-black font-modern">1,024</h3>
+                </div>
             </div>
+
+            <div class="glass p-8 rounded-[40px]">
+                <div class="flex justify-between items-center mb-8">
+                    <h3 class="text-xl font-bold uppercase tracking-tighter">จัดการสต็อกแยกไซซ์/สี (SKU Management)</h3>
+                    <button class="bg-white text-black px-6 py-2 rounded-xl font-bold text-xs hover:bg-blue-500 hover:text-white transition">+ เพิ่มสินค้าใหม่</button>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left">
+                        <thead>
+                            <tr class="text-gray-500 text-xs uppercase border-b border-white/5">
+                                <th class="pb-4">สินค้า</th>
+                                <th class="pb-4">หมวดหมู่</th>
+                                <th class="pb-4">สต็อก (S/M/L/XL)</th>
+                                <th class="pb-4">ราคา</th>
+                                <th class="pb-4">สถานะ</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-sm">
+                            <tr class="border-b border-white/5">
+                                <td class="py-6 font-bold uppercase">Tech-Core Tee</td>
+                                <td>T-Shirt</td>
+                                <td><span class="text-blue-500">10</span> / <span class="text-blue-500">5</span> / <span class="text-red-500">0</span> / <span class="text-blue-500">8</span></td>
+                                <td class="font-modern italic">฿890</td>
+                                <td><span class="bg-green-500/10 text-green-500 px-3 py-1 rounded-full text-[10px] font-bold">ONLINE</span></td>
+                            </tr>
+                            <tr class="border-b border-white/5">
+                                <td class="py-6 font-bold uppercase">Ghost Hoodie</td>
+                                <td>Outerwear</td>
+                                <td><span class="text-blue-500">4</span> / <span class="text-blue-500">12</span> / <span class="text-blue-500">6</span> / <span class="text-blue-500">2</span></td>
+                                <td class="font-modern italic">฿2,490</td>
+                                <td><span class="bg-green-500/10 text-green-500 px-3 py-1 rounded-full text-[10px] font-bold">ONLINE</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <section id="cart" class="tab-content">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-4xl font-black font-modern italic mb-10">CHECKOUT SYSTEM</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                    <div class="space-y-6" id="checkout-items">
+                        </div>
+                    <div class="glass p-8 rounded-[40px] h-fit">
+                        <h4 class="text-lg font-bold mb-6">สรุปคำสั่งซื้อ</h4>
+                        <div class="space-y-4 text-sm text-gray-400 mb-8">
+                            <div class="flex justify-between"><span>ยอดรวม</span><span id="subtotal">฿0</span></div>
+                            <div class="flex justify-between"><span>ค่าจัดส่ง (Flash Express)</span><span>฿50</span></div>
+                            <div class="flex justify-between text-white font-bold text-xl pt-4 border-t border-white/5">
+                                <span>ยอดสุทธิ</span><span id="final-total">฿0</span>
+                            </div>
+                        </div>
+                        <p class="text-[10px] uppercase font-bold text-blue-500 mb-2">วิธีชำระเงิน</p>
+                        <select class="w-full bg-white/5 border border-white/10 p-4 rounded-2xl mb-6 outline-none">
+                            <option>โอนผ่านธนาคาร / QR PromptPay</option>
+                            <option>บัตรเครดิต (Stripe Online)</option>
+                            <option>เก็บเงินปลายทาง (COD)</option>
+                        </select>
+                        <button onclick="alert('ระบบกำลังบันทึกออเดอร์ลง Database...')" class="w-full btn-glow py-4 rounded-2xl font-bold uppercase tracking-widest text-sm italic">ยืนยันการสั่งซื้อ & ชำระเงิน</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
     </main>
 
-    <div id="cart-sidebar" class="fixed right-0 top-0 h-full w-full md:w-[450px] bg-[#050505] shadow-2xl translate-x-full z-[110] flex flex-col border-l border-white/5">
-        <div class="p-8 border-b border-white/5 flex justify-between items-center">
-            <h3 class="text-2xl font-black font-modern uppercase italic">Your Archive</h3>
-            <button onclick="toggleCart()" class="w-12 h-12 flex items-center justify-center rounded-full hover:bg-white/5 transition text-2xl"><i class="fa-solid fa-xmark"></i></button>
-        </div>
-
-        <div id="cart-items" class="flex-grow overflow-y-auto p-8 space-y-8">
-            </div>
-
-        <div class="p-8 bg-[#080808] border-t border-white/5">
-            <div class="flex justify-between items-end mb-8">
-                <span class="text-gray-500 text-xs font-bold uppercase tracking-widest">Subtotal</span>
-                <span id="total-price" class="text-4xl font-modern font-bold tracking-tighter text-blue-500">฿0</span>
-            </div>
-            <button onclick="checkout()" class="w-full btn-premium py-5 text-sm uppercase tracking-[0.2em] mb-4">
-                Confirm & Pay via LINE
-            </button>
-            <p class="text-[9px] text-center text-gray-600 uppercase tracking-widest italic">Shipping worldwide from Bangkok</p>
-        </div>
-    </div>
-
     <script>
-        // --- ฐานข้อมูลสินค้า (นายเพิ่ม/ลดตรงนี้ได้เลย) ---
         const products = [
-            { id: 1, name: 'CYBER-PUNK TEE', price: 990, cat: 'T-Shirt', img: 'https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=800' },
-            { id: 2, name: 'NEON GHOST HOODIE', price: 2490, cat: 'Outerwear', img: 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=800' },
-            { id: 3, name: 'TECH-CARGO V3', price: 3200, cat: 'Pants', img: 'https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=800' },
-            { id: 4, name: 'SILICON BEANIE', price: 550, cat: 'Acc', img: 'https://images.unsplash.com/photo-1576871337622-98d48d365da2?w=800' }
+            { id: 1, name: 'Tech-Core Tee', price: 890, cat: 'T-Shirt', img: 'https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=800', stock: {S:10, M:5, L:0, XL:8} },
+            { id: 2, name: 'Ghost Hoodie', price: 2490, cat: 'Outerwear', img: 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=800', stock: {S:4, M:12, L:6, XL:2} },
+            { id: 3, name: 'Cyber Cargo', price: 3200, cat: 'Pants', img: 'https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=800', stock: {S:2, M:0, L:5, XL:0} }
         ];
 
-        let cart = JSON.parse(localStorage.getItem('captain_cart')) || [];
+        let cart = [];
 
         function renderStore() {
             const grid = document.getElementById('product-grid');
             grid.innerHTML = products.map(p => `
-                <div class="glass-card rounded-[40px] p-5 flex flex-col group">
-                    <div class="relative overflow-hidden rounded-[32px] aspect-[3/4] mb-8">
+                <div class="glass rounded-[40px] overflow-hidden group">
+                    <div class="relative aspect-[3/4] overflow-hidden">
                         <img src="${p.img}" class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity p-8 flex flex-col justify-end">
+                        <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-6">
                             <div class="flex gap-2 mb-4">
-                                ${['S', 'M', 'L', 'XL'].map(s => `<button onclick="selectSize(this, ${p.id})" class="size-opt w-10 h-10 rounded-xl border border-white/20 text-[10px] font-bold hover:bg-blue-600 transition">${s}</button>`).join('')}
+                                ${Object.keys(p.stock).map(size => `
+                                    <button onclick="addToCart(${p.id}, '${size}')" class="flex-grow py-2 rounded-xl border border-white/20 text-[10px] font-bold hover:bg-blue-600 ${p.stock[size] === 0 ? 'opacity-20 pointer-events-none' : ''}">${size}</button>
+                                `).join('')}
                             </div>
-                            <button onclick="add(${p.id})" class="btn-premium py-3 text-[10px] uppercase tracking-widest">Add to Archive</button>
                         </div>
                     </div>
-                    <div class="px-2">
+                    <div class="p-6">
                         <p class="text-[10px] text-blue-500 font-bold uppercase tracking-widest mb-2">${p.cat}</p>
-                        <h4 class="text-xl font-bold tracking-tight mb-2 uppercase">${p.name}</h4>
-                        <p class="text-2xl font-modern font-bold tracking-tighter text-gray-400 italic">฿${p.price.toLocaleString()}</p>
+                        <h4 class="text-xl font-bold tracking-tight mb-2 uppercase italic">${p.name}</h4>
+                        <p class="text-2xl font-modern font-bold tracking-tighter text-gray-500 italic">฿${p.price.toLocaleString()}</p>
                     </div>
                 </div>
             `).join('');
-            updateUI();
         }
 
-        let selectedSizes = {};
-
-        function selectSize(btn, pid) {
-            const parent = btn.parentElement;
-            parent.querySelectorAll('.size-opt').forEach(b => b.classList.remove('active-size'));
-            btn.classList.add('active-size');
-            selectedSizes[pid] = btn.innerText;
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
         }
 
-        function toggleCart() {
-            document.getElementById('cart-sidebar').classList.toggle('translate-x-full');
+        function addToCart(pid, size) {
+            const product = products.find(x => x.id === pid);
+            cart.push({...product, selectedSize: size});
+            updateCart();
+            alert(`เพิ่ม ${product.name} ไซซ์ ${size} ลงตะกร้าแล้ว`);
         }
 
-        function add(pid) {
-            if (!selectedSizes[pid]) return alert("กรุณาเลือกไซส์ก่อนครับนาย!");
-            const p = products.find(x => x.id === pid);
-            cart.push({ ...p, size: selectedSizes[pid], cartId: Date.now() });
-            save();
-            updateUI();
-            toggleCart();
-        }
-
-        function updateUI() {
-            document.getElementById('cart-count').innerText = cart.length;
-            document.getElementById('cart-items').innerHTML = cart.map((item, i) => `
-                <div class="flex gap-6 items-center bg-white/5 p-4 rounded-[24px] border border-white/5 shadow-inner">
-                    <img src="${item.img}" class="w-20 h-24 rounded-2xl object-cover">
-                    <div class="flex flex-col flex-grow">
-                        <h5 class="text-xs font-bold uppercase tracking-widest mb-1">${item.name}</h5>
-                        <p class="text-[10px] text-blue-500 font-bold mb-2 uppercase tracking-tighter">Size: ${item.size}</p>
-                        <p class="text-lg font-modern font-bold">฿${item.price.toLocaleString()}</p>
+        function updateCart() {
+            const container = document.getElementById('checkout-items');
+            if(cart.length === 0) {
+                container.innerHTML = `<div class="py-20 text-center text-gray-600 font-bold uppercase tracking-widest">ว่างเปล่า</div>`;
+            } else {
+                container.innerHTML = cart.map((item, i) => `
+                    <div class="glass p-5 rounded-3xl flex gap-6 items-center">
+                        <img src="${item.img}" class="w-20 h-24 object-cover rounded-2xl">
+                        <div class="flex-grow">
+                            <h5 class="text-sm font-bold uppercase">${item.name}</h5>
+                            <p class="text-xs text-blue-500 font-bold tracking-tighter uppercase mt-1">ไซซ์: ${item.selectedSize}</p>
+                            <p class="text-lg font-modern font-bold mt-2">฿${item.price.toLocaleString()}</p>
+                        </div>
+                        <button onclick="cart.splice(${i},1); updateCart();" class="text-gray-700 hover:text-red-500"><i class="fa-solid fa-trash"></i></button>
                     </div>
-                    <button onclick="remove(${i})" class="w-10 h-10 flex items-center justify-center rounded-xl bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white transition"><i class="fa-solid fa-trash-can"></i></button>
-                </div>
-            `).join('');
-            
-            const total = cart.reduce((s, x) => s + x.price, 0);
-            document.getElementById('total-price').innerText = `฿${total.toLocaleString()}`;
-        }
-
-        function remove(i) { cart.splice(i, 1); save(); updateUI(); }
-        function save() { localStorage.setItem('captain_cart', JSON.stringify(cart)); }
-
-        function checkout() {
-            if(!cart.length) return alert("ตะกร้ายังว่างอยู่ครับ!");
-            
-            const total = cart.reduce((s,x)=>s+x.price,0);
-            let msg = "👕 *NEW ORDER: CAPTAIN STUDIO*\n";
-            msg += "--------------------------\n";
-            cart.forEach((item, i) => {
-                msg += `${i+1}. ${item.name} (${item.size}) - ฿${item.price.toLocaleString()}\n`;
-            });
-            msg += "--------------------------\n";
-            msg += `💰 *TOTAL: ฿${total.toLocaleString()}*\n\n`;
-            msg += "📍 *ที่อยู่จัดส่ง:* (ลูกค้าพิมพ์แจ้งที่นี่)";
-
-            // --- เปลี่ยนไอดีไลน์ลูกค้าที่นี่ ---
-            const lineID = "@YOUR_LINE_ID"; 
-            window.location.href = `https://line.me/R/oaMessage/${lineID}/?${encodeURIComponent(msg)}`;
-            
-            // ล้างตะกร้าหลังสั่งเสร็จ
-            cart = [];
-            save();
-            updateUI();
+                `).join('');
+            }
+            const sub = cart.reduce((s, x) => s + x.price, 0);
+            document.getElementById('subtotal').innerText = `฿${sub.toLocaleString()}`;
+            document.getElementById('final-total').innerText = `฿${(sub + 50).toLocaleString()}`;
         }
 
         renderStore();
+        updateCart();
     </script>
 </body>
 </html>
